@@ -1,0 +1,34 @@
+{
+  "name": "@emech/nestjs-app-common",
+  "version": "0.0.2",
+  "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "url": "https://github.com/emech-en/nestjs-common.git",
+    "type": "git"
+  },
+  "private": false,
+  "author": "emech",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  },
+  "bugs": {
+    "url": "https://github.com/emech-en/nestjs-common/issues"
+  },
+  "homepage": "https://github.com/emech-en/nestjs-common#readme",
+  "dependencies": {},
+  "keywords": [
+    "nestjs",
+    "authentication",
+    "authorization",
+    "email",
+    "mailgun",
+    "emailotp",
+    "access-base-authorization"
+  ]
+}
