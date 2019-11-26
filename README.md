@@ -1,2 +1,3 @@
-# nest-app-core
-Some core utilities for Nest-Js application
+# @emech/nestjs-app-common
+
+Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application
