@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,11 +19,31 @@
   "author": "emech",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "test": "jest --config jestconfig.json",
+    "build": "rm -rf dist/* && tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {},
   "devDependencies": {
+    "@nestjs/common": "^6.10.1",
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.14",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "rxjs": "^6.5.3",
+    "ts-jest": "^24.2.0",
+    "tslint": "^5.20.1",
     "typescript": "^3.7.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^6.10.1",
+    "rxjs": "^6.5.3"
   },
   "keywords": [
     "nestjs",

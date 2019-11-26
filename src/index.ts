@@ -1,1 +1,1 @@
-export * from './utilites';
+export * from './utilities';
