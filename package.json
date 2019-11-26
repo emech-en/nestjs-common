@@ -4,6 +4,10 @@
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "homepage": "https://github.com/emech-en/nestjs-common#readme",
+  "bugs": {
+    "url": "https://github.com/emech-en/nestjs-common/issues"
+  },
   "repository": {
     "url": "https://github.com/emech-en/nestjs-common.git",
     "type": "git"
@@ -14,14 +18,10 @@
   "scripts": {
     "build": "tsc"
   },
+  "dependencies": {},
   "devDependencies": {
     "typescript": "^3.7.2"
   },
-  "bugs": {
-    "url": "https://github.com/emech-en/nestjs-common/issues"
-  },
-  "homepage": "https://github.com/emech-en/nestjs-common#readme",
-  "dependencies": {},
   "keywords": [
     "nestjs",
     "authentication",
