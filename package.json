@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "main": "dist/",
   "types": "dist/",
