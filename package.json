@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,21 +29,30 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "dependencies": {},
+  "dependencies": {
+    "mailgun-js": "^0.22.0"
+  },
   "devDependencies": {
     "@nestjs/common": "^6.10.1",
+    "@nestjs/core": "^6.10.2",
+    "@nestjs/platform-express": "^6.10.2",
+    "@nestjs/testing": "^6.10.2",
     "@types/jest": "^24.0.23",
+    "@types/mailgun-js": "^0.22.3",
     "@types/node": "^12.12.14",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "rxjs": "^6.5.3",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
+    "typeorm": "^0.2.20",
     "typescript": "^3.7.2"
   },
   "peerDependencies": {
     "@nestjs/common": "^6.10.1",
-    "rxjs": "^6.5.3"
+    "@nestjs/core": "^6.10.2",
+    "rxjs": "^6.5.3",
+    "typeorm": "^0.2.20"
   },
   "keywords": [
     "nestjs",
