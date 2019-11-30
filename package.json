@@ -1,12 +1,7 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.13",
+  "version": "0.0.2",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist/**/*"
-  ],
   "homepage": "https://github.com/emlsech-en/nestjs-common#readme",
   "bugs": {
     "url": "https://github.com/emech-en/nestjs-common/issues"
@@ -20,14 +15,14 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --config jestconfig.json",
-    "build": "rm -rf dist/* && tsc",
+    "build": "yarn run build:clean && yarn run build:ts && yarn run build:copy",
+    "build:ts": "tsc",
+    "build:clean": "rm -rf dest build",
+    "build:copy": "node ./scripts/build.js",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "publish": "yarn test && yarn run lint && yarn run format && yarn version && yarn run build && cd build && npm publish"
   },
   "dependencies": {
     "mailgun-js": "^0.22.0"
@@ -40,6 +35,8 @@
     "@types/jest": "^24.0.23",
     "@types/mailgun-js": "^0.22.3",
     "@types/node": "^12.12.14",
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.6",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "rxjs": "^6.5.3",
