@@ -1,7 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { MailgunService } from './mailgun.service';
 import { MailgunConfig } from './mailgun.config';
-import { Logger } from '@nestjs/common';
 
 describe('EmailService', () => {
   let service: MailgunService;
@@ -9,7 +8,6 @@ describe('EmailService', () => {
   beforeEach(async () => {
     const testModule = await Test.createTestingModule({
       providers: [
-        Logger,
         MailgunService,
         {
           provide: MailgunConfig,

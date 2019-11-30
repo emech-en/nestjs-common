@@ -1,7 +1,7 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, Global, Module, Provider, Type } from '@nestjs/common';
 import { EmailService } from './email.service';
-import { MailgunService } from './mailgun';
 
+@Global()
 @Module({})
 export class EmailModule {
   static forRoot<T extends EmailService, G extends Type<T>>(

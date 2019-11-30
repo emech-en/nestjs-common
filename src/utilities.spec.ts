@@ -75,7 +75,7 @@ describe('Test getEnumValues(v: typeof enum) {}', () => {
   test('Test When Some Keys = Some Values', () => {
     enum TestEnum {
       G,
-      A = 'SALAM',
+      A = 'FooBar',
       C = 'A',
       B = 'D',
       D = 1,

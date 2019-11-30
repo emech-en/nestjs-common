@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { EmailService } from '../email.service';
 import MailGun, { Mailgun } from 'mailgun-js';
 import { MailgunConfig } from './mailgun.config';
@@ -10,7 +10,8 @@ export class MailgunService extends EmailService {
 
   constructor(
     @Inject(MailgunConfig) private readonly config: MailgunConfig,
-    private readonly logger: Logger,
+    @Optional()
+    private readonly logger: Logger = new Logger('MailgunService'),
   ) {
     super();
     this.mailgunInstance = new MailGun(config);
@@ -18,11 +19,11 @@ export class MailgunService extends EmailService {
 
   async send(email: Email): Promise<void> {
     const result = await this.mailgunInstance.messages().send({
-      from: email.from,
+      from: email.from ?? this.config.defaults.fromDomain,
       to: email.to,
       subject: email.subject,
       html: email.html,
     });
-    this.logger.debug(`Email sent to ${email.to}: ${JSON.stringify(result)}`);
+    this.logger.verbose(`Email sent to ${email.to}: ${JSON.stringify(result)}`);
   }
 }
