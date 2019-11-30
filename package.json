@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "homepage": "https://github.com/emlsech-en/nestjs-common#readme",
   "bugs": {
@@ -22,7 +22,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepublish": "yarn test && yarn run lint && yarn run format && yarn version",
-    "publish": "yarn run build && cd build && yarn publish --access public && cd .. && yarn build:clean"
+    "publish": "yarn run build && cd build && yarn publish --non-interactive --access public && cd .. && yarn build:clean"
   },
   "dependencies": {
     "mailgun-js": "^0.22.0"
