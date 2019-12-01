@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.31",
+  "version": " 0.0.32",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "homepage": "https://github.com/emlsech-en/nestjs-common#readme",
   "bugs": {
@@ -21,24 +21,33 @@
     "build:copy": "node ./scripts/build.js",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "prepublish": "yarn test && yarn run lint && yarn run format && yarn version",
-    "publish": "yarn run build && cd build && yarn publish --non-interactive --access public && cd .. && yarn build:clean"
+    "prepublishOnly": "yarn test && yarn run lint && yarn run format && yarn version",
+    "publish": "yarn run prepublishOnly && yarn run build && cd build && yarn publish --non-interactive --access public && cd .. && yarn build:clean"
   },
   "dependencies": {
-    "mailgun-js": "^0.22.0"
+    "bcrypt": "^3.0.7",
+    "class-transformer": "^0.2.3",
+    "mailgun-js": "^0.22.0",
+    "randomstring": "^1.1.5"
   },
   "devDependencies": {
     "@nestjs/common": "^6.10.1",
     "@nestjs/core": "^6.10.2",
     "@nestjs/platform-express": "^6.10.2",
+    "@nestjs/swagger": "^3.1.0",
     "@nestjs/testing": "^6.10.2",
+    "@nestjs/typeorm": "^6.2.0",
+    "@types/bcrypt": "^3.0.0",
     "@types/jest": "^24.0.23",
     "@types/mailgun-js": "^0.22.3",
     "@types/node": "^12.12.14",
+    "@types/randomstring": "^1.1.6",
+    "class-validator": "^0.11.0",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
@@ -48,6 +57,10 @@
   "peerDependencies": {
     "@nestjs/common": "^6.10.1",
     "@nestjs/core": "^6.10.2",
+    "@nestjs/swagger": "^3.1.0",
+    "@nestjs/typeorm": "^6.2.0",
+    "class-validator": "^0.11.0",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "typeorm": "^0.2.20"
   },
