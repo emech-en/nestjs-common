@@ -1,7 +1,13 @@
 import { DynamicModule, Provider, Type } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccessTokenEntity, AccountEntity, OtpCodeEntity, OtpEmailCodeEntity, OtpSmsCodeEntity } from './models';
+import {
+  AccessTokenEntity,
+  AccountEntity,
+  OtpCodeEntity,
+  OtpEmailCodeEntity,
+  OtpSmsCodeEntity,
+} from './models';
 import { AuthenticationController } from './authentication.controller';
 import {
   BcryptHashProvider,
@@ -27,16 +33,22 @@ export class AuthenticationModuleBuilder {
     AuthenticationGuard,
   ];
   private imports = [
-    TypeOrmModule.forFeature([AccountEntity, OtpCodeEntity, OtpEmailCodeEntity, OtpSmsCodeEntity, AccessTokenEntity]),
+    TypeOrmModule.forFeature([
+      AccountEntity,
+      OtpCodeEntity,
+      OtpEmailCodeEntity,
+      OtpSmsCodeEntity,
+      AccessTokenEntity,
+    ]),
   ];
   private controllers = [AuthenticationController];
 
-  useLoginProviders(...loginProviders: Array<Type<LoginProvider>>): AuthenticationModuleBuilder {
+  useLoginProviders(...loginProviders: Array<Type<LoginProvider>>): this {
     this.providers.push(setLoginProviders(...loginProviders));
     return this;
   }
 
-  useTokenProvider(provider: Type<TokenProvider>): AuthenticationModuleBuilder {
+  useTokenProvider(provider: Type<TokenProvider>): this {
     this.providers.push({
       provide: TokenProvider,
       useClass: provider,
@@ -44,7 +56,7 @@ export class AuthenticationModuleBuilder {
     return this;
   }
 
-  useHashProvider(provider: Type<HashProvider>): AuthenticationModuleBuilder {
+  useHashProvider(provider: Type<HashProvider>): this {
     this.providers.push({
       provide: HashProvider,
       useClass: provider,

@@ -22,7 +22,9 @@ export class SimpleTokenProvider extends TokenProvider {
   }
 
   async verify(token: string): Promise<AccountEntity> {
-    const accessToken = await this.repository.findOneOrFail(token, { relations: ['account'] });
+    const accessToken = await this.repository.findOneOrFail(token, {
+      relations: ['account'],
+    });
     if (!accessToken || accessToken.isExpired()) {
       throw new UnauthorizedException();
     }

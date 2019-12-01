@@ -1,4 +1,8 @@
-import { createParamDecorator, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  createParamDecorator,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AccountEntity } from './models';
 
 const logger = new Logger('AccountDecorator');

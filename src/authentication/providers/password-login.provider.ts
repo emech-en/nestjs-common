@@ -16,24 +16,34 @@ export class PasswordLoginProvider extends LoginProvider {
   }
 
   canHandle(request: LoginRequest) {
-    const isEmailPass = request.type === LoginType.EmailPass && !!request.password && !!request.email;
-    const isUserPass = request.type === LoginType.UserPass && !!request.password && !!request.username;
-    return !!isEmailPass || !!isUserPass;
+    const isEmailPass =
+      request.type === LoginType.EmailPass &&
+      !!request.password &&
+      !!request.email;
+    const isUserPass =
+      request.type === LoginType.UserPass &&
+      !!request.password &&
+      !!request.username;
+    return isEmailPass || isUserPass;
   }
 
   async login(request: LoginRequest): Promise<LoginResult> {
     let account: AccountEntity | undefined;
     if (request.username) {
-      account = await this.accountRepository.findOneOrFail({ username: request.username });
+      account = await this.accountRepository.findOneOrFail({
+        username: request.username,
+      });
     }
     if (request.email) {
-      account = await this.accountRepository.findOneOrFail({ email: request.email });
+      account = await this.accountRepository.findOneOrFail({
+        email: request.email,
+      });
     }
-    if (!account) {
+    if (!account || !account.password) {
       throw new UnauthorizedException();
     }
 
-    if (await this.hashProvider.verify(request.password, account.password)) {
+    if (await this.hashProvider.verify(request.password!, account.password)) {
       return { account, isNew: false };
     } else {
       throw new UnauthorizedException();

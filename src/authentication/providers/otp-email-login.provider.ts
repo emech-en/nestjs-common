@@ -1,5 +1,11 @@
 import { LoginProvider } from './login.provider';
-import { AccountRegisterData, LoginRequest, LoginResult, LoginType, RegisterType } from '../types';
+import {
+  AccountRegisterData,
+  LoginRequest,
+  LoginResult,
+  LoginType,
+  RegisterType,
+} from '../types';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { AccountEntity, OtpEmailCodeEntity } from '../models';
 import { InjectRepository } from '@nestjs/typeorm';

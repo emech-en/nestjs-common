@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { TokenProvider } from './providers';
 
 const logger = new Logger('AuthenticationGuard');
@@ -18,7 +23,9 @@ export class AuthenticationGuard implements CanActivate {
 
     try {
       const account = await this.tokenProvider.verify(token);
-      logger.verbose(`Account found. ACCOUNT={id: ${account.id}, email: ${account.email}}`);
+      logger.verbose(
+        `Account found. ACCOUNT={id: ${account.id}, email: ${account.email}}`,
+      );
       if (!account) {
         return false;
       }

@@ -1,9 +1,16 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../core';
+import { BaseEntity } from '../../models';
 import { plainToClass } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { ApiModelPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 @Entity('account')
 export class AccountEntity extends BaseEntity {

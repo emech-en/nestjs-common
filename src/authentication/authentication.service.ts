@@ -36,7 +36,10 @@ export class AuthenticationService {
   async resetPassword(id: number) {
     await this.accountRepository.update(
       { id },
-      { password: await this.hashProvider.hash(DEFAULT_PASSWORD), shouldChangePassword: true },
+      {
+        password: await this.hashProvider.hash(DEFAULT_PASSWORD),
+        shouldChangePassword: true,
+      },
     );
   }
 }

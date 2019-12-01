@@ -1,12 +1,30 @@
-import { Body, Controller, Inject, Param, Patch, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Param,
+  Patch,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AccountEntity, OtpEmailCodeEntity } from './models';
 import { AuthenticationService } from './authentication.service';
-import { ChangePasswordRequest, LoginRequest, LoginResponse, OtpCodeResponse } from './types';
+import {
+  ChangePasswordRequest,
+  LoginRequest,
+  LoginResponse,
+  OtpCodeResponse,
+} from './types';
 import { HashProvider, LoginProvider, TokenProvider } from './providers';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmailService } from '../core';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
+import { EmailService } from '../email';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiUseTags,
+} from '@nestjs/swagger';
 import { Account } from './account.decorator';
 
 @Controller('auth')
@@ -41,15 +59,22 @@ export class AuthenticationController {
 
   @Post('otp/email/:email')
   @ApiOperation({ title: 'Request OtpEmail Code' })
-  @ApiOkResponse({ description: 'Id and expiration date of the created OtpEmailCodeEntity', type: OtpCodeResponse })
-  async generateOtpEmail(@Param('email') email: string): Promise<OtpCodeResponse> {
+  @ApiOkResponse({
+    description: 'Id and expiration date of the created OtpEmailCodeEntity',
+    type: OtpCodeResponse,
+  })
+  async generateOtpEmail(
+    @Param('email') email: string,
+  ): Promise<OtpCodeResponse> {
     const emailCode = new OtpEmailCodeEntity();
     emailCode.email = email;
     emailCode.generateCode();
     emailCode.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
     emailCode.retryLeft = 3;
 
-    const { code, id, expiresAt } = await this.otpEmailRepository.save(emailCode);
+    const { code, id, expiresAt } = await this.otpEmailRepository.save(
+      emailCode,
+    );
 
     /*
      * ToDo: Send an html content with full information and unsubscribe o ina
@@ -70,7 +95,13 @@ export class AuthenticationController {
     @Account() account: AccountEntity,
     @Body() request: ChangePasswordRequest,
   ): Promise<AccountEntity> {
-    if (await this.hashProvider.verify(request.currentPassword, account.password)) {
+    if (
+      account.password &&
+      (await this.hashProvider.verify(
+        request.currentPassword,
+        account.password,
+      ))
+    ) {
       account.password = await this.hashProvider.hash(request.newPassword);
       account.shouldChangePassword = false;
       return await this.accountRepository.save(account);

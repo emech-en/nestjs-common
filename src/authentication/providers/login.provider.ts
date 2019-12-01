@@ -7,7 +7,9 @@ export abstract class LoginProvider {
   abstract canHandle(credential: LoginRequest): boolean;
 }
 
-export function setLoginProviders(...classes: Array<Type<LoginProvider>>): Provider {
+export function setLoginProviders(
+  ...classes: Array<Type<LoginProvider>>
+): Provider {
   return {
     provide: LoginProvider,
     useFactory: (...args) => [...args],

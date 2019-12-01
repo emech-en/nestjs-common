@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  TableInheritance,
+} from 'typeorm';
 import { generate as generateRandomString } from 'randomstring';
 
 @Entity('otpCode')

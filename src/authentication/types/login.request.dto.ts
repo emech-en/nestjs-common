@@ -1,9 +1,9 @@
 import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
-import { enumToArray } from '../../utils';
+import { getEnumValues } from '../../utilities';
 import { LoginType } from './login-type.enum';
 
 export class LoginRequest {
-  @ApiModelProperty({ enum: enumToArray(LoginType) })
+  @ApiModelProperty({ enum: getEnumValues(LoginType) })
   type: LoginType;
 
   @ApiModelPropertyOptional()
