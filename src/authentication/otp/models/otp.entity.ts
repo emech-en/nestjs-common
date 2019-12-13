@@ -3,13 +3,22 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  TableInheritance,
 } from 'typeorm';
 import { generate as generateRandomString } from 'randomstring';
+import { ApiModelProperty } from '@nestjs/swagger';
+import { getEnumValues } from '../../utilities';
 
-@Entity('otpCode')
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
-export class OtpCodeEntity {
+export enum OtpType {
+  EMAIL = 'EMAIL',
+  SMS = 'SMS',
+}
+
+@Entity('otp')
+export class OtpEntity {
+  @ApiModelProperty({ enum: getEnumValues(OtpType) })
+  @Column({ type: 'enum', enum: OtpType, update: false })
+  type: OtpType;
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -37,6 +46,12 @@ export class OtpCodeEntity {
     nullable: true,
   })
   usedAt?: Date;
+
+  @Column({ type: 'varchar', nullable: true })
+  email?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  phone?: string;
 
   public isExpired() {
     if (this.usedAt != null) {

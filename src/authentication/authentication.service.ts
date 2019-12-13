@@ -1,45 +1,44 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { TokenProvider } from './token.provider';
+import { AccessTokenEntity, AccountEntity } from '../models';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccountEntity } from './models';
-import { AccountRegisterData, RegisterRequest, RegisterType } from './types';
-import { HashProvider } from './providers';
+import { EntityManager, Repository } from 'typeorm';
+import { UnauthorizedException } from '@nestjs/common';
+import { LoginResponse } from '../types';
 
-const DEFAULT_PASSWORD = '123';
-
-@Injectable()
-export class AuthenticationService {
+export class SimpleTokenProvider extends TokenProvider {
   constructor(
-    @InjectRepository(AccountEntity)
-    private readonly accountRepository: Repository<AccountEntity>,
-    private readonly hashProvider: HashProvider,
-  ) {}
-
-  async register(data: RegisterRequest): Promise<AccountEntity> {
-    if (!data.email && !data.username) {
-      throw new BadRequestException('[username] or [email] is required');
-    }
-
-    const accountEntity = new AccountEntity();
-    accountEntity.email = data.email;
-    accountEntity.username = data.username;
-    accountEntity.password = await this.hashProvider.hash(DEFAULT_PASSWORD);
-    accountEntity.shouldChangePassword = true;
-    accountEntity.domainData = data.domainData;
-    return await this.accountRepository.save(accountEntity, {
-      data: {
-        registerType: RegisterType.AuthenticationService,
-      } as AccountRegisterData,
-    });
+    @InjectRepository(AccessTokenEntity)
+    private readonly repository: Repository<AccessTokenEntity>,
+  ) {
+    super();
   }
 
-  async resetPassword(id: number) {
-    await this.accountRepository.update(
-      { id },
-      {
-        password: await this.hashProvider.hash(DEFAULT_PASSWORD),
-        shouldChangePassword: true,
-      },
-    );
+  async generate(account: AccountEntity): Promise<LoginResponse> {
+    const token = new AccessTokenEntity();
+    token.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 1000);
+    token.account = account;
+    const { id, expiresAt } = await this.repository.save(token);
+    return { token: id, expiresAt };
+  }
+
+  async generateInTransaction(
+    entityManager: EntityManager,
+    account: AccountEntity,
+  ): Promise<LoginResponse> {
+    const token = new AccessTokenEntity();
+    token.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 1000);
+    token.account = account;
+    const { id, expiresAt } = await entityManager.save(token);
+    return { token: id, expiresAt };
+  }
+
+  async verify(token: string): Promise<AccountEntity> {
+    const accessToken = await this.repository.findOneOrFail(token, {
+      relations: ['account'],
+    });
+    if (!accessToken || accessToken.isExpired()) {
+      throw new UnauthorizedException();
+    }
+    return accessToken.account;
   }
 }
