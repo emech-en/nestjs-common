@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 import { generate as generateRandomString } from 'randomstring';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { getEnumValues } from '../../utilities';
+import { getEnumValues } from '../../../utilities';
 
 export enum OtpType {
   EMAIL = 'EMAIL',
