@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "0.0.6",
+  "version": "0.0.61",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "homepage": "https://github.com/emlsech-en/nestjs-common#readme",
   "bugs": {
