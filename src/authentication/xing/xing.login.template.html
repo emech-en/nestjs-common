@@ -1,0 +1,46 @@
+<!--suppress ES6ConvertVarToLetConst -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login with XING</title>
+    <meta charset="UTF-8" />
+    <script>
+      function onXingAuthLogin(response) {
+        var output;
+
+        console.log(response);
+
+        if (response.user) {
+          output = 'Successful login for ' + response.user.display_name;
+        } else if (response.error) {
+          output = 'Error: ' + response.error;
+        }
+
+        document.getElementById('output').innerHTML = output;
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Place the plugin script -->
+    <script type="xing/login">
+      {
+        "consumer_key": "[[[[YOUR_CONSUMER_KEY]]]]"
+      }
+    </script>
+
+    <p id="output">No user logged in.</p>
+
+    <!-- Include the plugin library -->
+    <script>
+      (function(d) {
+        var js;
+        var id = 'lwx';
+        if (d.getElementById(id)) return;
+        js = d.createElement('script');
+        js.id = id;
+        js.src = 'https://www.xing-share.com/plugins/login.js';
+        d.getElementsByTagName('head')[0].appendChild(js);
+      })(document);
+    </script>
+  </body>
+</html>
