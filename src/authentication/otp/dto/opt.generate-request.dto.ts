@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { OtpType } from './otp.entity';
+import { OtpType } from '../../models';
 
 export class OptGenerateRequestDto {
   @ApiModelProperty()

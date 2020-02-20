@@ -6,7 +6,7 @@ export enum RegisterType {
   PASSWORD = 'PASSWORD',
 }
 
-export abstract class OnUserRegisterHandler {
+export abstract class OnRegisterHandler {
   abstract async handle(
     entityManager: EntityManager,
     registerType: RegisterType,

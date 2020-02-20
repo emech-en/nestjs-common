@@ -1,27 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthenticationService } from './authentication.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AccountEntity } from './models';
+import { AccessTokenEntity } from './models';
 import { Repository } from 'typeorm';
-import { BcryptHashProvider, HashProvider } from './providers';
-import { BadRequestException } from '@nestjs/common';
-import { RegisterType } from './types';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
-  let hashProvider: HashProvider;
-  let accountEntityRepository: Repository<AccountEntity>;
+  let accessTokenRepo: Repository<AccessTokenEntity>;
 
   beforeEach(async () => {
     const testModule: TestingModule = await Test.createTestingModule({
       providers: [
         AuthenticationService,
         {
-          provide: HashProvider,
-          useClass: BcryptHashProvider,
-        },
-        {
-          provide: getRepositoryToken(AccountEntity),
+          provide: getRepositoryToken(AccessTokenEntity),
           useClass: Repository,
         },
       ],
@@ -30,9 +22,8 @@ describe('AuthenticationService', () => {
     const testApp = testModule.createNestApplication();
 
     service = testApp.get(AuthenticationService);
-    hashProvider = testApp.get(HashProvider);
-    accountEntityRepository = testApp.get<Repository<AccountEntity>>(
-      getRepositoryToken(AccountEntity),
+    accessTokenRepo = testApp.get<Repository<AccessTokenEntity>>(
+      getRepositoryToken(AccessTokenEntity),
     );
   });
 
@@ -40,43 +31,47 @@ describe('AuthenticationService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('AuthenticationService.register', () => {
-    it('Should throw error when username and email is undefined', async () => {
-      await expect(service.register({})).rejects.toThrow(BadRequestException);
+  describe('AuthenticationService.logout', () => {
+    it('Should do nothing if token is invalid or expired', async () => {
+      const repoMock = jest
+        .spyOn(accessTokenRepo, 'findOne')
+        .mockResolvedValue(undefined);
+      await service.logout('INVALID_TOKEN');
+      expect(repoMock).toBeCalledWith('INVALID_TOKEN');
     });
   });
 
-  describe('AuthenticationService.register', () => {
-    it('Should throw error when username and email is undefined', async () => {
-      await expect(service.register({})).rejects.toThrow(BadRequestException);
-    });
-
-    it('Should create a user with default password', async () => {
-      const expectedResult = new AccountEntity();
-      const accountToBeCreate = new AccountEntity();
-      accountToBeCreate.username = 'testUser';
-      accountToBeCreate.password = '1234';
-      accountToBeCreate.email = undefined;
-      accountToBeCreate.shouldChangePassword = true;
-      accountToBeCreate.domainData = undefined;
-
-      const hashMock = jest
-        .spyOn(hashProvider, 'hash')
-        .mockResolvedValueOnce('1234');
-      const repositoryMock = jest
-        .spyOn(accountEntityRepository, 'save')
-        .mockResolvedValueOnce(expectedResult);
-
-      const result = await service.register({
-        username: 'testUser',
-      });
-      expect(hashMock).toHaveBeenCalledWith('123');
-      expect(repositoryMock).toBeCalledWith(accountToBeCreate, {
-        data: {
-          registerType: RegisterType.AuthenticationService,
-        },
-      });
-      expect(result).toBe(expectedResult);
-    });
-  });
+  // describe('AuthenticationService.register', () => {
+  //   it('Should throw error when username and email is undefined', async () => {
+  //     await expect(service.register({})).rejects.toThrow(BadRequestException);
+  //   });
+  //
+  //   it('Should create a user with default password', async () => {
+  //     const expectedResult = new AccessTokenEntity();
+  //     const accountToBeCreate = new AccessTokenEntity();
+  //     accountToBeCreate.username = 'testUser';
+  //     accountToBeCreate.password = '1234';
+  //     accountToBeCreate.email = undefined;
+  //     accountToBeCreate.shouldChangePassword = true;
+  //     accountToBeCreate.domainData = undefined;
+  //
+  //     const hashMock = jest
+  //       .spyOn(hashProvider, 'hash')
+  //       .mockResolvedValueOnce('1234');
+  //     const repositoryMock = jest
+  //       .spyOn(accessTokenEntity, 'save')
+  //       .mockResolvedValueOnce(expectedResult);
+  //
+  //     const result = await service.register({
+  //       username: 'testUser',
+  //     });
+  //     expect(hashMock).toHaveBeenCalledWith('123');
+  //     expect(repositoryMock).toBeCalledWith(accountToBeCreate, {
+  //       data: {
+  //         registerType: RegisterType.AuthenticationService,
+  //       },
+  //     });
+  //     expect(result).toBe(expectedResult);
+  //   });
+  // });
 });

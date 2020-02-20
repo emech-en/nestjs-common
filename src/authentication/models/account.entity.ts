@@ -1,7 +1,4 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../models';
-import { plainToClass } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
 import { ApiModelPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
@@ -11,6 +8,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { BaseEntity } from '../../models';
 
 @Entity('account')
 export class AccountEntity extends BaseEntity {
@@ -47,21 +45,4 @@ export class AccountEntity extends BaseEntity {
   @IsEmpty()
   @Column({ default: false })
   isBanned: boolean;
-
-  @ApiModelPropertyOptional({ readOnly: true })
-  @IsEmpty()
-  @Column({ type: 'jsonb' })
-  domainData: any;
-
-  setData<T>(data: T) {
-    this.domainData = data;
-  }
-
-  getData<T>(): T {
-    return this.domainData as T;
-  }
-
-  getDataClass<T>(t: ClassType<T>): T {
-    return plainToClass(t, this.domainData);
-  }
 }

@@ -3,7 +3,7 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AccountEntity } from './models';
+import { AccountEntity } from '../models';
 
 const logger = new Logger('AccountDecorator');
 

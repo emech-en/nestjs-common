@@ -1,9 +1,8 @@
 export * from './models';
-export * from './providers';
-export * from './types';
+export * from './dto';
+export * from './decorators';
+export * from './handlers';
+export { PasswordService } from './password';
 export * from './authentication.module';
-export * from './authentication.module.builder';
-export * from './authentication.controller';
 export * from './authentication.service';
 export * from './authentication.guard';
-export * from './account.decorator';

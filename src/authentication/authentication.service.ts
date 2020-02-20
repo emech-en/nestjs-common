@@ -1,19 +1,16 @@
-import { TokenProvider } from './token.provider';
-import { AccessTokenEntity, AccountEntity } from '../models';
+import { AccessTokenEntity, AccountEntity } from './models';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { UnauthorizedException } from '@nestjs/common';
-import { LoginResponse } from '../types';
+import { LoginResponse } from './dto';
 
-export class SimpleTokenProvider extends TokenProvider {
+export class AuthenticationService {
   constructor(
     @InjectRepository(AccessTokenEntity)
     private readonly repository: Repository<AccessTokenEntity>,
-  ) {
-    super();
-  }
+  ) {}
 
-  async generate(account: AccountEntity): Promise<LoginResponse> {
+  async login(account: AccountEntity): Promise<LoginResponse> {
     const token = new AccessTokenEntity();
     token.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 1000);
     token.account = account;
@@ -21,7 +18,7 @@ export class SimpleTokenProvider extends TokenProvider {
     return { token: id, expiresAt };
   }
 
-  async generateInTransaction(
+  async loginInTransaction(
     entityManager: EntityManager,
     account: AccountEntity,
   ): Promise<LoginResponse> {
@@ -32,7 +29,7 @@ export class SimpleTokenProvider extends TokenProvider {
     return { token: id, expiresAt };
   }
 
-  async verify(token: string): Promise<AccountEntity> {
+  async verifyToken(token: string): Promise<AccountEntity> {
     const accessToken = await this.repository.findOneOrFail(token, {
       relations: ['account'],
     });
@@ -40,5 +37,14 @@ export class SimpleTokenProvider extends TokenProvider {
       throw new UnauthorizedException();
     }
     return accessToken.account;
+  }
+
+  async logout(token: string): Promise<void> {
+    const accessToken = await this.repository.findOne(token);
+    if (!accessToken || accessToken.isExpired()) {
+      return;
+    }
+    accessToken.isLoggedOut = true;
+    await this.repository.save(accessToken);
   }
 }

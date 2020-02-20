@@ -4,13 +4,13 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { TokenProvider } from './providers';
+import { AuthenticationService } from './authentication.service';
 
 const logger = new Logger('AuthenticationGuard');
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  constructor(private readonly tokenProvider: TokenProvider) {}
+  constructor(private readonly authenticationService: AuthenticationService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -22,19 +22,14 @@ export class AuthenticationGuard implements CanActivate {
     }
 
     try {
-      const account = await this.tokenProvider.verify(token);
-      logger.verbose(
-        `Account found. ACCOUNT={id: ${account.id}, email: ${account.email}}`,
-      );
-      if (!account) {
+      const account = await this.authenticationService.verifyToken(token);
+      if (!account || account.isBanned) {
         return false;
       }
-
-      if (account.isBanned) {
-        return false;
-      }
+      logger.verbose(`Account found ID=${account.id} EMAIL=${account.email}}`);
 
       (request as any).account = account;
+      (request as any).token = token;
       return true;
     } catch (e) {
       logger.warn(`Error in AuthenticationGuard. MESSAGE=${e.message}`);
