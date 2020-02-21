@@ -31,7 +31,6 @@ const LOGIN_HTML_TEMPLATE = `
           console.log("sending data for verify", user, hash);
           $.post("verify", {user: user, hash: hash}, function(data) {
             console.log("verify result: ", data);
-            console.log(data);
           });
         } else {
           console.log("login failed");
@@ -54,7 +53,14 @@ const LOGIN_HTML_TEMPLATE = `
         return "";
       }
 
+      var onXingAuthLoginIsCalled = false;
       function onXingAuthLogin(response) {
+        if (onXingAuthLoginIsCalled) {
+          return;
+        } else {
+          onXingAuthLoginIsCalled = true;
+        }
+
         if (window.verifyLogin) {
           if (response.user) {
             window.verifyLogin(true, response.user, getCookie("xing_p_lw_s_[[[[YOUR_CONSUMER_KEY]]]]"));
