@@ -1,9 +1,4 @@
-import {
-  Controller,
-  NotImplementedException,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Controller, NotImplementedException, Param, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
 import { OptGenerateResponseDto } from './dto';
 
@@ -16,9 +11,7 @@ export class OtpSmsController {
     description: 'Id and expiration date of the created OTP Code',
     type: OptGenerateResponseDto,
   })
-  async generateEmailOtp(
-    @Param() phone: string,
-  ): Promise<OptGenerateResponseDto> {
+  async generateEmailOtp(@Param() phone: string): Promise<OptGenerateResponseDto> {
     throw new NotImplementedException();
     /*
      * ToDo: Check phone number is valid

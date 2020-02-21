@@ -1,19 +1,5 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Head,
-  Inject,
-  Optional,
-  Param,
-  Post,
-} from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiUseTags,
-} from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Head, Inject, Optional, Param, Post } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from '../models';
@@ -93,15 +79,8 @@ export class PasswordRegisterController {
     account.password = await this.passwordService.hash(password);
     return await this.accountRepo.manager.transaction(async entityManager => {
       await entityManager.save(account);
-      await this.onRegisterHandler?.handle(
-        entityManager,
-        RegisterType.PASSWORD,
-        account,
-      );
-      return this.authenticationService.loginInTransaction(
-        entityManager,
-        account,
-      );
+      await this.onRegisterHandler?.handle(entityManager, account, RegisterType.PASSWORD);
+      return this.authenticationService.loginInTransaction(entityManager, account);
     });
   }
 }

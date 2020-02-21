@@ -4,9 +4,7 @@ import { EmailService } from './email.service';
 @Global()
 @Module({})
 export class EmailModule {
-  static forRoot<T extends EmailService, G extends Type<T>>(
-    type: G,
-  ): DynamicModule {
+  static forRoot<T extends EmailService, G extends Type<T>>(type: G): DynamicModule {
     const providers: Provider[] = [
       {
         provide: EmailService,

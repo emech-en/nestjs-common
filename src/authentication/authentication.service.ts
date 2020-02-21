@@ -18,10 +18,7 @@ export class AuthenticationService {
     return { token: id, expiresAt };
   }
 
-  async loginInTransaction(
-    entityManager: EntityManager,
-    account: AccountEntity,
-  ): Promise<LoginResponse> {
+  async loginInTransaction(entityManager: EntityManager, account: AccountEntity): Promise<LoginResponse> {
     const token = new AccessTokenEntity();
     token.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 1000);
     token.account = account;

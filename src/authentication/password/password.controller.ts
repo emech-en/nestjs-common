@@ -1,17 +1,5 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Patch,
-  Post,
-  UnauthorizedException,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiUseTags,
-} from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Patch, Post, UnauthorizedException } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from '../models';
@@ -40,9 +28,7 @@ export class PasswordController {
       throw new BadRequestException();
     }
 
-    const account = await this.accountRepository.findOne(
-      email ? { email } : { username },
-    );
+    const account = await this.accountRepository.findOne(email ? { email } : { username });
 
     if (!account || !account.password) {
       throw new UnauthorizedException();
@@ -59,10 +45,7 @@ export class PasswordController {
   @ApiBearerAuth()
   @ApiOperation({ title: 'Change current user Password' })
   @ApiOkResponse({ description: 'Password Changed Successfully.' })
-  async updatePassword(
-    @Account() account: AccountEntity,
-    @Body() request: PasswordChangeRequestDto,
-  ): Promise<void> {
+  async updatePassword(@Account() account: AccountEntity, @Body() request: PasswordChangeRequestDto): Promise<void> {
     if (!account.password) {
       throw new UnauthorizedException();
     }
@@ -81,10 +64,7 @@ export class PasswordController {
   @ApiBearerAuth()
   @ApiOperation({ title: 'Set current user password' })
   @ApiOkResponse({ description: 'Password Set Successfully.' })
-  async setPassword(
-    @Account() account: AccountEntity,
-    @Body('password') password: string,
-  ): Promise<void> {
+  async setPassword(@Account() account: AccountEntity, @Body('password') password: string): Promise<void> {
     if (account.password) {
       throw new UnauthorizedException();
     }

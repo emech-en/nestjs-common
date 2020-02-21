@@ -10,9 +10,7 @@ describe('Test getEnumValues(v: typeof enum) {}', () => {
     }
 
     const result = getEnumValues(TestEnum);
-    expect(result.sort()).toEqual(
-      [TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D].sort(),
-    );
+    expect(result.sort()).toEqual([TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D].sort());
   });
 
   test('Test When All Values Are Number', () => {
@@ -24,9 +22,7 @@ describe('Test getEnumValues(v: typeof enum) {}', () => {
     }
 
     const result = getEnumValues(TestEnum);
-    expect(result.sort()).toEqual(
-      [TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D].sort(),
-    );
+    expect(result.sort()).toEqual([TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D].sort());
   });
 
   test('Test When All Values Are String', () => {
@@ -38,9 +34,7 @@ describe('Test getEnumValues(v: typeof enum) {}', () => {
     }
 
     const result = getEnumValues(TestEnum);
-    expect(result.sort()).toEqual(
-      [TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D].sort(),
-    );
+    expect(result.sort()).toEqual([TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D].sort());
   });
 
   test('Test When Values Are Mixed', () => {
@@ -82,9 +76,7 @@ describe('Test getEnumValues(v: typeof enum) {}', () => {
     }
 
     const result = getEnumValues(TestEnum);
-    expect(result.sort()).toEqual(
-      [TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D, TestEnum.G].sort(),
-    );
+    expect(result.sort()).toEqual([TestEnum.B, TestEnum.A, TestEnum.C, TestEnum.D, TestEnum.G].sort());
   });
 
   test('Test When Enum is Empty', () => {

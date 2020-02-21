@@ -22,9 +22,7 @@ describe('AuthenticationService', () => {
     const testApp = testModule.createNestApplication();
 
     service = testApp.get(AuthenticationService);
-    accessTokenRepo = testApp.get<Repository<AccessTokenEntity>>(
-      getRepositoryToken(AccessTokenEntity),
-    );
+    accessTokenRepo = testApp.get<Repository<AccessTokenEntity>>(getRepositoryToken(AccessTokenEntity));
   });
 
   it('Should be defined', () => {
@@ -33,9 +31,7 @@ describe('AuthenticationService', () => {
 
   describe('AuthenticationService.logout', () => {
     it('Should do nothing if token is invalid or expired', async () => {
-      const repoMock = jest
-        .spyOn(accessTokenRepo, 'findOne')
-        .mockResolvedValue(undefined);
+      const repoMock = jest.spyOn(accessTokenRepo, 'findOne').mockResolvedValue(undefined);
       await service.logout('INVALID_TOKEN');
       expect(repoMock).toBeCalledWith('INVALID_TOKEN');
     });

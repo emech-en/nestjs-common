@@ -22,9 +22,7 @@ export class OtpEmailController {
     description: 'Id and expiration date of the created OTP Code',
     type: OptGenerateResponseDto,
   })
-  async generateEmailOtp(
-    @Param() email: string,
-  ): Promise<OptGenerateResponseDto> {
+  async generateEmailOtp(@Param() email: string): Promise<OptGenerateResponseDto> {
     /*
      * ToDo: Check email is valid
      */
@@ -36,9 +34,7 @@ export class OtpEmailController {
     emailCode.type = OtpType.EMAIL;
     emailCode.email = email;
 
-    const { code, id, expiresAt } = await this.otpCodeRepository.save(
-      emailCode,
-    );
+    const { code, id, expiresAt } = await this.otpCodeRepository.save(emailCode);
 
     /*
      * ToDo: Send an html content with full information and unsubscribe o ina

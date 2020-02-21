@@ -4,9 +4,7 @@ interface StandardEnum<T> {
   [nu: number]: string;
 }
 
-export const getEnumValues = <T extends StandardEnum<any>>(
-  enumObject: T,
-): Array<string | number> => {
+export const getEnumValues = <T extends StandardEnum<any>>(enumObject: T): Array<string | number> => {
   return Object.keys(enumObject)
     .filter(key => isNaN(+key))
     .map(key => enumObject[key]);

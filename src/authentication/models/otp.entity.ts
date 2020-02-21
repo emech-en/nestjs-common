@@ -1,9 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { generate as generateRandomString } from 'randomstring';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { getEnumValues } from '../../utilities';

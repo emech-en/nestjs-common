@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Inject,
-  Optional,
-  Post,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Inject, Optional, Post, UnauthorizedException } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -32,9 +25,7 @@ export class OtpController {
   @Post('login')
   @ApiOperation({ title: 'Login to System Using One Time Password' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
-  async login(
-    @Body() { id, code }: OtpLoginRequestDto,
-  ): Promise<LoginResponse> {
+  async login(@Body() { id, code }: OtpLoginRequestDto): Promise<LoginResponse> {
     const otpCode = await this.otpCodeRepository.findOne(id);
 
     if (!otpCode || otpCode.isExpired()) {
@@ -49,9 +40,7 @@ export class OtpController {
 
     // Only one of the email or phone in otpCodeEntity object has value.
     const { email, phone } = otpCode;
-    let account = await this.accountRepository.findOne(
-      email ? { email } : { phone },
-    );
+    let account = await this.accountRepository.findOne(email ? { email } : { phone });
     let isNewAccount = false;
 
     if (!account) {
@@ -61,22 +50,13 @@ export class OtpController {
       account.phone = phone;
     }
 
-    return await this.otpCodeRepository.manager.transaction(
-      async entityManager => {
-        if (isNewAccount) {
-          await entityManager.save(account);
-          await this.onRegisterHandler?.handle(
-            entityManager,
-            RegisterType.OTP,
-            account!,
-          );
-        }
-        await entityManager.save(otpCode);
-        return await this.authenticationService.loginInTransaction(
-          entityManager,
-          account!,
-        );
-      },
-    );
+    return await this.otpCodeRepository.manager.transaction(async entityManager => {
+      if (isNewAccount) {
+        await entityManager.save(account);
+        await this.onRegisterHandler?.handle(entityManager, account!, RegisterType.OTP);
+      }
+      await entityManager.save(otpCode);
+      return await this.authenticationService.loginInTransaction(entityManager, account!);
+    });
   }
 }

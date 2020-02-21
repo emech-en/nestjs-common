@@ -1,13 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { ApiModelPropertyOptional } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
 import { BaseEntity } from '../../models';
 
 @Entity('account')
