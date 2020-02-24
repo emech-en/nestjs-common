@@ -1,6 +1,6 @@
 {
   "name": "@emech/nestjs-common",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Some simple use common utilities (Authentication, Authorization, Email, ...) for a NestJs application",
   "homepage": "https://github.com/emlsech-en/nestjs-common#readme",
   "bugs": {
@@ -27,6 +27,7 @@
   "dependencies": {
     "bcrypt": "^4.0.0",
     "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.0",
     "lodash": "^4.17.15",
     "mailgun-js": "^0.22.0",
     "node-cls": "^1.0.3",
@@ -45,7 +46,6 @@
     "@types/mailgun-js": "^0.22.4",
     "@types/node": "^13.7.4",
     "@types/randomstring": "^1.1.6",
-    "class-validator": "^0.11.0",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "jest": "^25.1.0",
@@ -62,7 +62,6 @@
     "@nestjs/core": "^6.11.8",
     "@nestjs/swagger": "^4.3.1",
     "@nestjs/typeorm": "^6.3.3",
-    "class-validator": "^0.11.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
     "typeorm": "^0.2.22"
