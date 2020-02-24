@@ -1,1 +1,1 @@
-export * from './verify.request.dto';
+export * from './xing-login.dto';

@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { XING_LOGIN_HTML } from './xing.helpers';
 import { LoginResponse } from '../dto';
 import { XingService } from './xing.service';
-import { VerifyRequestDto } from './dto';
+import { XingLoginDto } from './dto';
 
 @Controller('auth/xing')
 @ApiTags('Authentication')
@@ -29,7 +29,7 @@ export class XingController {
   @Post('/verify')
   @ApiOperation({ summary: 'Verify the Xing Login Response And Perform Actual Login' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
-  async verifyXingLogin(@Body() body: VerifyRequestDto): Promise<LoginResponse> {
+  async verifyXingLogin(@Body() body: XingLoginDto): Promise<LoginResponse> {
     const { user, hash } = body;
     return this.xingService.loginByXing(user, hash);
   }

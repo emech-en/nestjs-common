@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class VerifyRequestDto {
+export class XingLoginDto {
   @ApiProperty()
   @IsNotEmpty()
   user: any;
