@@ -1,10 +1,11 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, TableInheritance } from 'typeorm';
 import { ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
-import { BaseEntity } from '../../models';
+import { AbstractEntity } from '../../models';
 
-@Entity('account')
-export class AccountEntity extends BaseEntity {
+@Entity('user')
+@TableInheritance({ column: { name: 'userType', type: 'varchar' } })
+export class SimpleUserEntity extends AbstractEntity {
   @ApiModelPropertyOptional({ minLength: 5, maxLength: 45, uniqueItems: true })
   @IsOptional()
   @IsString()
@@ -38,4 +39,16 @@ export class AccountEntity extends BaseEntity {
   @IsEmpty()
   @Column({ default: false })
   isBanned: boolean;
+
+  constructor(data?: Partial<SimpleUserEntity>) {
+    super();
+
+    if (data) {
+      this.username = data.username;
+      this.email = data.email;
+      this.phone = data.phone;
+      this.password = data.password;
+      this.shouldChangePassword = data.shouldChangePassword;
+    }
+  }
 }
