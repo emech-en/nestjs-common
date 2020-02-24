@@ -1,42 +1,33 @@
 import { Column, Entity, TableInheritance } from 'typeorm';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AbstractEntity } from '../../models';
+import { Exclude } from 'class-transformer';
 
 @Entity('user')
 @TableInheritance({ column: { name: 'userType', type: 'varchar' } })
 export class UserBaseEntity extends AbstractEntity {
-  @ApiPropertyOptional({ minLength: 5, maxLength: 45, uniqueItems: true })
-  @IsOptional()
-  @IsString()
-  @MinLength(5)
+  @ApiPropertyOptional({ uniqueItems: true, readOnly: true })
   @Column({ unique: true, nullable: true })
   username?: string;
 
-  @ApiPropertyOptional({ format: 'email', uniqueItems: true })
-  @IsOptional()
-  @IsEmail()
+  @ApiPropertyOptional({ format: 'email', uniqueItems: true, readOnly: true })
   @Column({ unique: true, nullable: true })
   email?: string;
 
-  @ApiPropertyOptional({ uniqueItems: true })
-  @IsOptional()
-  @IsPhoneNumber('ZZ')
+  @ApiPropertyOptional({ uniqueItems: true, readOnly: true })
   @Column({ unique: true, nullable: true })
   phone?: string;
 
-  @ApiPropertyOptional({ readOnly: true })
-  @IsEmpty()
+  @Exclude()
   @Column({ nullable: true })
   password?: string;
 
   @ApiPropertyOptional({ readOnly: true })
-  @IsEmpty()
   @Column({ nullable: true })
+  @Exclude({})
   shouldChangePassword?: boolean;
 
-  @ApiPropertyOptional({ readOnly: true })
-  @IsEmpty()
+  @ApiProperty({ readOnly: true })
   @Column({ default: false })
   isBanned: boolean;
 
