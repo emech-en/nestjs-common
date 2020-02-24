@@ -1,49 +1,58 @@
-import { Controller, Inject, Param, Post } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { OtpEntity, OtpType } from '../models';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FindOneOptions } from 'typeorm';
 import { EmailService } from '../../email';
-import { OptGenerateResponseDto } from './dto';
+import { RequestTransaction } from '../../request-transaction';
+import { AuthenticationService } from '../authentication.service';
+import { OtpEmailEntity, UserBaseEntity } from '../models';
+import { OtpController } from './otp.controller';
+import { OtpEmailGenerateDto, OtpGenerateResponseDto } from './dto';
 
 @Controller('auth/otp/email')
-@ApiUseTags('auth/otp/email')
-export class OtpEmailController {
+@ApiTags('Authentication')
+export class OtpEmailController extends OtpController<OtpEmailEntity> {
   constructor(
-    @InjectRepository(OtpEntity)
-    private readonly otpCodeRepository: Repository<OtpEntity>,
-    @Inject(EmailService)
     private readonly emailService: EmailService,
-  ) {}
+    requestTransaction: RequestTransaction,
+    authenticationService: AuthenticationService,
+  ) {
+    super(OtpEmailEntity, requestTransaction, authenticationService);
+  }
 
-  @Post('/:email')
-  @ApiOperation({ title: 'Request OTP Code' })
+  @Post('request')
+  @ApiOperation({ summary: 'Request OTP Code' })
   @ApiOkResponse({
     description: 'Id and expiration date of the created OTP Code',
-    type: OptGenerateResponseDto,
+    type: OtpGenerateResponseDto,
   })
-  async generateEmailOtp(@Param() email: string): Promise<OptGenerateResponseDto> {
-    /*
-     * ToDo: Check email is valid
-     */
+  protected async generateCode(@Body() value: OtpEmailGenerateDto): Promise<OtpGenerateResponseDto> {
+    const repo = this.requestTransaction.getRepository<OtpEmailEntity>(OtpEmailEntity);
 
-    const emailCode = new OtpEntity();
-    emailCode.generateCode();
-    emailCode.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    emailCode.retryLeft = 3;
-    emailCode.type = OtpType.EMAIL;
-    emailCode.email = email;
+    const newCode = new OtpEmailEntity();
+    newCode.email = value.email;
 
-    const { code, id, expiresAt } = await this.otpCodeRepository.save(emailCode);
+    const { id, expiresAt, code } = await repo.save(newCode);
 
     /*
      * ToDo: Send an html content with full information and unsubscribe o ina
      */
     await this.emailService.send({
-      to: email,
+      to: value.email,
       subject: 'Login',
       html: `You login code is ${code}`,
     });
     return { id, expiresAt };
+  }
+
+  protected createNewUserData(otpCodeEntity: OtpEmailEntity): Partial<UserBaseEntity> {
+    return { email: otpCodeEntity.email };
+  }
+
+  protected getRegisterData(otpCodeEntity: OtpEmailEntity): any {
+    return { email: otpCodeEntity.email };
+  }
+
+  protected getUserFindQuery(otpCodeEntity: OtpEmailEntity): FindOneOptions<UserBaseEntity> {
+    return { where: { email: otpCodeEntity.email } };
   }
 }

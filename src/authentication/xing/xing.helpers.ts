@@ -7,6 +7,7 @@ export const getXingLoginHtml = (consumerKey: string): string => {
   return LOGIN_HTML_TEMPLATE.replace(replaceRegex, consumerKey);
 };
 
+// noinspection ES6ConvertVarToLetConst,JSUnresolvedVariable,JSUnresolvedFunction,JSUnresolvedLibraryURL
 /**
  * ********************************* *
  * The Xing Login Page Html Template *

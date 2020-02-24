@@ -2,9 +2,9 @@ import { DynamicModule, Type, ValueProvider } from '@nestjs/common/interfaces';
 import { ConfigurationModule } from './configuration.module';
 
 export class ConfigurationModuleBuilder {
-  private providers: Array<ValueProvider<any>> = [];
+  private providers: ValueProvider[] = [];
 
-  addConfig<T, G extends Type<T>>(type: G, value: T): ConfigurationModuleBuilder {
+  addConfig<T>(type: Type<T>, value: OmitThisParameter<T>): ConfigurationModuleBuilder {
     this.providers.push({
       useValue: value,
       provide: type,

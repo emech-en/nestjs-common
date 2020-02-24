@@ -1,10 +1,11 @@
 import { RegisterService, RegisterType } from './register.service';
 import { UserBaseEntity } from '../models';
-import { Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RequestTransaction } from '../../request-transaction';
 
-export class SimpleRegisterService extends RegisterService {
-  constructor(@Inject(RequestTransaction) private readonly requestTransaction: RequestTransaction) {
+@Injectable()
+export class RegisterBaseService extends RegisterService {
+  constructor(private readonly requestTransaction: RequestTransaction) {
     super();
   }
 

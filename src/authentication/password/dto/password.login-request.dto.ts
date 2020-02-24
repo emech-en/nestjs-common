@@ -1,10 +1,19 @@
-import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsString, ValidateIf } from 'class-validator';
 
 export class PasswordLoginRequestDto {
-  @ApiModelPropertyOptional()
+  @ApiPropertyOptional()
+  @ValidateIf(o => !o.email)
+  @IsString()
   username?: string;
-  @ApiModelPropertyOptional()
+
+  @ApiPropertyOptional()
+  @ValidateIf(o => !o.username)
+  @IsString()
+  @IsEmail()
   email?: string;
-  @ApiModelProperty()
+
+  @ApiProperty()
+  @IsString()
   password: string;
 }

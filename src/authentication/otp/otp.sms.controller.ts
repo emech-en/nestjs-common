@@ -1,32 +1,49 @@
-import { Controller, NotImplementedException, Param, Post } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
-import { OptGenerateResponseDto } from './dto';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FindOneOptions } from 'typeorm';
+import { OtpSmsEntity, UserBaseEntity } from '../models';
+import { OtpController } from './otp.controller';
+import { RequestTransaction } from '../../request-transaction';
+import { AuthenticationService } from '../authentication.service';
+import { OtpGenerateResponseDto, OtpSmsGenerateDto } from './dto';
+
+const logger = new Logger('OtpSmsController');
 
 @Controller('auth/otp/sms')
-@ApiUseTags('auth/otp/sms')
-export class OtpSmsController {
-  @Post('/:phone')
-  @ApiOperation({ title: 'Request OTP Code' })
+@ApiTags('Authentication')
+export class OtpSmsController extends OtpController<OtpSmsEntity> {
+  constructor(requestTransaction: RequestTransaction, authenticationService: AuthenticationService) {
+    super(OtpSmsEntity, requestTransaction, authenticationService);
+  }
+
+  @Post('request')
+  @ApiOperation({ summary: 'Request OTP Code' })
   @ApiOkResponse({
     description: 'Id and expiration date of the created OTP Code',
-    type: OptGenerateResponseDto,
+    type: OtpGenerateResponseDto,
   })
-  async generateEmailOtp(@Param() phone: string): Promise<OptGenerateResponseDto> {
-    throw new NotImplementedException();
-    /*
-     * ToDo: Check phone number is valid
-     */
-    // const otpCode = new OtpEntity();
-    // otpCode.generateCode();
-    // otpCode.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    // otpCode.retryLeft = 3;
-    // otpCode.type = OtpType.SMS;
-    // otpCode.phone = phone;
-    //
-    // const { code, id, expiresAt } = await this.otpCodeRepository.save(otpCode);
+  protected async generateCode(@Body() value: OtpSmsGenerateDto): Promise<OtpGenerateResponseDto> {
+    const repo = this.requestTransaction.getRepository<OtpSmsEntity>(OtpSmsEntity);
 
-    /*
-     * ToDo: Send SmS to the phone number
-     */
+    const optCode = new OtpSmsEntity();
+    optCode.phone = value.phone;
+    const { id, expiresAt, code } = await repo.save(optCode);
+
+    // ToDo: Send Sms To Phone Number
+    logger.log(`SMS to=${value.phone} code=${code}`);
+
+    return { id, expiresAt };
+  }
+
+  protected createNewUserData(otpCodeEntity: OtpSmsEntity): Partial<UserBaseEntity> {
+    return { phone: otpCodeEntity.phone };
+  }
+
+  protected getRegisterData(otpCodeEntity: OtpSmsEntity): any {
+    return { phone: otpCodeEntity.phone };
+  }
+
+  protected getUserFindQuery(otpCodeEntity: OtpSmsEntity): FindOneOptions<UserBaseEntity> {
+    return { where: { phone: otpCodeEntity.phone } };
   }
 }

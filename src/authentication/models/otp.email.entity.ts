@@ -1,8 +1,8 @@
 import { ChildEntity, Column } from 'typeorm';
-import { OtpEntity } from './otp.entity';
+import { OtpAbstractEntity } from './otp.abstract.entity';
 
 @ChildEntity()
-export class EmailOtpCodeEntity extends OtpEntity {
+export class OtpEmailEntity extends OtpAbstractEntity {
   @Column({ type: 'varchar' })
   email: string;
 }

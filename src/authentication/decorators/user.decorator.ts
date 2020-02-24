@@ -1,24 +1,22 @@
-import { createParamDecorator, Logger, UnauthorizedException } from '@nestjs/common';
+import { createParamDecorator, Logger, Type, UnauthorizedException } from '@nestjs/common';
 import { UserBaseEntity } from '../models';
-import { ObjectType } from 'typeorm';
 
 const logger = new Logger('UserParamDecorator');
 
-export const User = <ConcreteUser extends UserBaseEntity>() =>
-  createParamDecorator<ObjectType<ConcreteUser>>((data, req) => {
-    if (!req.account) {
+export function createCurrentUserDecorator<T extends UserBaseEntity>(userType: Type<T>) {
+  return createParamDecorator<never, any, T>((data, req) => {
+    if (!req.currentUser) {
       throw new UnauthorizedException();
     }
 
-    if (!(req.account instanceof data)) {
-      throw new UnauthorizedException();
+    if (req.currentUser instanceof userType) {
+      const user = req.currentUser as T;
+      logger.debug(`Current User: Type=${userType.name} Id=${user.id}, Email=${user.email}`);
+      return user;
     }
 
-    const account = req.account as ConcreteUser;
-    if (account.isBanned) {
-      throw new UnauthorizedException();
-    }
+    throw new UnauthorizedException();
+  });
+}
 
-    logger.debug(`Current User: Type=${data.name} Id=${account.id}, Email=${account.email}`);
-    return account;
-  })();
+export const CurrentUserBase = createCurrentUserDecorator(UserBaseEntity);

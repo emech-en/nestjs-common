@@ -6,28 +6,44 @@ import { CONTEXT_NAME, logger } from './request-transaction.helper';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
-export class RequestTransactionProvider {
+export class RequestTransaction {
   constructor(@InjectConnection() private connection: Connection) {}
 
-  getEntityManager(forceTransaction: boolean = true): EntityManager {
+  getEntityManager(useTransaction?: boolean): EntityManager {
     const clsContext = cls.getContext(CONTEXT_NAME);
-    if (clsContext && clsContext.entityManager) {
+
+    if (useTransaction === false) {
+      // IF [useTransaction === false]
+      // Return Default Transaction
+      logger.verbose(`RequestId: ${clsContext.requestId}: Returning Default EntityManager`);
+      return this.connection.manager;
+      /////////////////////////////////////////////////////////////////////////////////////////
+    } else if (clsContext && clsContext.entityManager) {
+      // IF [useTransaction !== false] AND [Transactional EntityManager is found in the Context]
+      // return Transactional EntityManager
       logger.verbose(`RequestId: ${clsContext.requestId}: Transactional EntityManager FOUND`);
       return clsContext.entityManager;
-    } else if (!forceTransaction) {
+      /////////////////////////////////////////////////////////////////////////////////////////
+    } else if (useTransaction === true) {
+      // IF [useTransaction === true] and [Transactional EntityManager is not found in the Context]
+      // Throw Error
       logger.error('Transactional EntityManager NOT_FOUND. Throwing Error.');
       throw new InternalServerErrorException('NOT IN A REQUEST TRANSACTION CONTEXT');
+      /////////////////////////////////////////////////////////////////////////////////////////
     } else {
+      // IF [useTransaction === undefined] and [Transactional EntityManager is not found in the Context]
+      // Return Default Transaction
       logger.warn('Transactional EntityManager NOT_FOUND. Returning Default EntityManager');
       return this.connection.manager;
+      /////////////////////////////////////////////////////////////////////////////////////////
     }
   }
 
-  getRepository<T>(target: ObjectType<T> | EntitySchema<T> | string, forceTransaction: boolean = true): Repository<T> {
-    return this.getEntityManager(forceTransaction).getRepository(target);
+  getRepository<T>(target: ObjectType<T> | EntitySchema<T> | string, forceTransaction?: boolean): Repository<T> {
+    return this.getEntityManager(forceTransaction).getRepository<T>(target);
   }
 
-  getCustomRepository<T>(customRepo: ObjectType<T>, forceTransaction: boolean = true): T {
-    return this.getEntityManager(forceTransaction).getCustomRepository(customRepo);
+  getCustomRepository<T>(customRepo: ObjectType<T>, forceTransaction?: boolean): T {
+    return this.getEntityManager(forceTransaction).getCustomRepository<T>(customRepo);
   }
 }

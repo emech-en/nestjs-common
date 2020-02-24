@@ -1,34 +1,36 @@
 import { Body, Controller, Get, Header, Inject, Post } from '@nestjs/common';
-import { ApiUseTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { XING_LOGIN_HTML } from './xing.helpers';
 import { LoginResponse } from '../dto';
 import { XingService } from './xing.service';
-
-interface VerifyRequest {
-  user: any;
-  hash: string;
-}
+import { VerifyRequestDto } from './dto';
 
 @Controller('auth/xing')
-@ApiUseTags('auth/xing')
+@ApiTags('Authentication')
 export class XingController {
   constructor(
     @Inject(XING_LOGIN_HTML)
     private readonly xingLoginHtml: string,
-    @Inject(XingService)
     private readonly xingService: XingService,
   ) {}
 
   @Get('/login')
   @Header('Content-Type', 'text/html; charset=UTF-8')
+  @ApiOperation({ summary: `Login To Xing And and Retrieve Xing User's Info` })
+  @ApiOkResponse({
+    content: {
+      'text/html': {},
+    },
+  })
   getXingLogin(): string {
     return this.xingLoginHtml;
   }
 
   @Post('/verify')
-  async verifyXingLogin(@Body() body: VerifyRequest): Promise<LoginResponse> {
+  @ApiOperation({ summary: 'Verify the Xing Login Response And Perform Actual Login' })
+  @ApiOkResponse({ description: 'User access token', type: LoginResponse })
+  async verifyXingLogin(@Body() body: VerifyRequestDto): Promise<LoginResponse> {
     const { user, hash } = body;
-    await this.xingService.validateLogin(user, hash);
-    return this.xingService.loginByXing(user);
+    return this.xingService.loginByXing(user, hash);
   }
 }

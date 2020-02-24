@@ -1,8 +1,8 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginResponse {
-  @ApiModelProperty()
+  @ApiProperty()
   token: string;
-  @ApiModelProperty({ type: 'string', format: 'date-time' })
+  @ApiProperty({ type: 'string', format: 'date-time' })
   expiresAt: Date;
 }

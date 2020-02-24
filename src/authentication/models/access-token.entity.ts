@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { AccountEntity } from './account.entity';
+import { UserBaseEntity } from './user.base.entity';
 
 @Entity('accessToken')
 export class AccessTokenEntity {
@@ -24,8 +24,8 @@ export class AccessTokenEntity {
   })
   isLoggedOut: boolean;
 
-  @ManyToOne(() => AccountEntity)
-  account: AccountEntity;
+  @ManyToOne(() => UserBaseEntity)
+  user: UserBaseEntity;
 
   public isExpired() {
     return this.isLoggedOut || new Date() > this.expiresAt;

@@ -3,7 +3,7 @@ import { generate as generateRandomString } from 'randomstring';
 
 @Entity('otp')
 @TableInheritance({ column: { name: 'type', type: 'varchar' } })
-export class OtpBase {
+export abstract class OtpAbstractEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -1,9 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { AuthenticationController } from './authentication.controller';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { AuthenticationService } from './authentication.service';
-import { AccessTokenEntity } from './models';
-import { Repository } from 'typeorm';
 
 describe('Authentication Controller', () => {
   let controller: AuthenticationController;
@@ -11,10 +8,9 @@ describe('Authentication Controller', () => {
   beforeEach(async () => {
     const testModule = await Test.createTestingModule({
       providers: [
-        AuthenticationService,
         {
-          provide: getRepositoryToken(AccessTokenEntity),
-          useClass: Repository,
+          provide: AuthenticationService,
+          useValue: {},
         },
       ],
       controllers: [AuthenticationController],

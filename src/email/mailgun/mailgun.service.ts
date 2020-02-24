@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { EmailService } from '../email.service';
 import MailGun, { Mailgun } from 'mailgun-js';
 import { MailgunConfig } from './mailgun.config';
@@ -9,7 +9,7 @@ export class MailgunService extends EmailService {
   private mailgunInstance: Mailgun;
 
   constructor(
-    @Inject(MailgunConfig) private readonly config: MailgunConfig,
+    private readonly config: MailgunConfig,
     @Optional()
     private readonly logger: Logger = new Logger('MailgunService'),
   ) {

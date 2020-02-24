@@ -1,10 +1,21 @@
-import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsString, MinLength, ValidateIf } from 'class-validator';
 
 export class PasswordRegisterRequestDto {
-  @ApiModelPropertyOptional()
+  @ApiPropertyOptional()
+  @ValidateIf(o => !o.username)
+  @IsString()
+  @IsEmail()
   email?: string;
-  @ApiModelPropertyOptional()
+
+  @ApiPropertyOptional()
+  @ValidateIf(o => !o.email)
+  @MinLength(4)
+  @IsString()
   username?: string;
-  @ApiModelProperty()
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(4)
   password: string;
 }

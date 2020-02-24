@@ -1,26 +1,24 @@
 import { BadRequestException, Body, Controller, Patch, Post, UnauthorizedException } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AccountEntity } from '../models';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserBaseEntity } from '../models';
 import { LoginResponse } from '../dto';
-import { PasswordChangeRequestDto, PasswordLoginRequestDto } from './dto';
-import { Account } from '../decorators';
+import { PasswordChangeRequestDto, PasswordLoginRequestDto, PasswordSetRequestDto } from './dto';
 import { PasswordService } from './password.service';
 import { AuthenticationService } from '../authentication.service';
+import { RequestTransaction } from '../../request-transaction';
+import { CurrentUserBase } from '../decorators';
 
 @Controller('auth/password')
-@ApiUseTags('auth/password')
+@ApiTags('Authentication')
 export class PasswordController {
   constructor(
-    @InjectRepository(AccountEntity)
-    private readonly accountRepository: Repository<AccountEntity>,
+    private readonly requestTransaction: RequestTransaction,
     private readonly authenticationService: AuthenticationService,
     private readonly passwordService: PasswordService,
   ) {}
 
   @Post('login')
-  @ApiOperation({ title: 'Login to System Using One Time Password' })
+  @ApiOperation({ summary: 'Login to System Using One Time Password' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
   async login(@Body() req: PasswordLoginRequestDto): Promise<LoginResponse> {
     const { username, email, password } = req;
@@ -28,14 +26,15 @@ export class PasswordController {
       throw new BadRequestException();
     }
 
-    const account = await this.accountRepository.findOne(email ? { email } : { username });
+    const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
+    const user = await userRepo.findOne(email ? { email } : { username });
 
-    if (!account || !account.password) {
+    if (!user || !user.password) {
       throw new UnauthorizedException();
     }
 
-    if (await this.passwordService.verify(password, account.password)) {
-      return this.authenticationService.login(account);
+    if (await this.passwordService.verify(password, user.password)) {
+      return this.authenticationService.login(user);
     } else {
       throw new UnauthorizedException();
     }
@@ -43,34 +42,36 @@ export class PasswordController {
 
   @Patch('/')
   @ApiBearerAuth()
-  @ApiOperation({ title: 'Change current user Password' })
+  @ApiOperation({ summary: 'Change current user Password' })
   @ApiOkResponse({ description: 'Password Changed Successfully.' })
-  async updatePassword(@Account() account: AccountEntity, @Body() request: PasswordChangeRequestDto): Promise<void> {
-    if (!account.password) {
+  async updatePassword(
+    @CurrentUserBase() currentUser: UserBaseEntity,
+    @Body() request: PasswordChangeRequestDto,
+  ): Promise<void> {
+    if (!currentUser.password) {
       throw new UnauthorizedException();
     }
 
     const { currentPassword, newPassword } = request;
-    if (await this.passwordService.verify(currentPassword, account.password)) {
-      account.password = await this.passwordService.hash(newPassword);
-      account.shouldChangePassword = false;
-      await this.accountRepository.save(account);
-    } else {
+    if (!(await this.passwordService.verify(currentPassword, currentUser.password))) {
       throw new UnauthorizedException();
     }
+
+    await this.passwordService.setUserPassword(currentUser, newPassword);
   }
 
   @Post('/')
   @ApiBearerAuth()
-  @ApiOperation({ title: 'Set current user password' })
+  @ApiOperation({ summary: 'Set current user password' })
   @ApiOkResponse({ description: 'Password Set Successfully.' })
-  async setPassword(@Account() account: AccountEntity, @Body('password') password: string): Promise<void> {
-    if (account.password) {
+  async setPassword(
+    @CurrentUserBase() currentUser: UserBaseEntity,
+    @Body() { password }: PasswordSetRequestDto,
+  ): Promise<void> {
+    if (currentUser.password) {
       throw new UnauthorizedException();
     }
 
-    account.password = await this.passwordService.hash(password);
-    account.shouldChangePassword = false;
-    await this.accountRepository.save(account);
+    await this.passwordService.setUserPassword(currentUser, password);
   }
 }

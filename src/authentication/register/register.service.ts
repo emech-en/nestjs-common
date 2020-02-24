@@ -1,4 +1,4 @@
-import { SimpleUserEntity } from '../models';
+import { UserBaseEntity } from '../models';
 
 export enum RegisterType {
   OTP = 'OTP',
@@ -8,8 +8,8 @@ export enum RegisterType {
 
 export abstract class RegisterService {
   abstract async register(
-    account: Partial<SimpleUserEntity>,
+    userData: Partial<UserBaseEntity>,
     registerType: RegisterType,
     registerData?: any,
-  ): Promise<SimpleUserEntity>;
+  ): Promise<UserBaseEntity>;
 }

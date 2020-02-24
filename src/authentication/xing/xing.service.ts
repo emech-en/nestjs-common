@@ -1,25 +1,19 @@
-import { Inject, Injectable, Optional, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { XING_SIGNATURE_SALT } from './xing.helpers';
 import { LoginResponse } from '../dto';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
-import { AccountEntity } from '../models';
+import { UserBaseEntity } from '../models';
 import { AuthenticationService } from '../authentication.service';
-import { OnRegisterHandler, RegisterType } from '../handlers';
+import { RegisterType } from '../register';
 import { createHmac } from 'crypto';
+import { RequestTransaction } from '../../request-transaction';
 
 @Injectable()
 export class XingService {
   constructor(
     @Inject(XING_SIGNATURE_SALT)
     private readonly xingSignatureSalt: string,
-    @Inject(AuthenticationService)
     private readonly authenticationService: AuthenticationService,
-    @InjectEntityManager()
-    private readonly entityManager: EntityManager,
-    @Optional()
-    @Inject(OnRegisterHandler)
-    private readonly onRegisterHandler?: OnRegisterHandler,
+    private readonly requestTransaction: RequestTransaction,
   ) {}
 
   async validateLogin(user: any, xingHash: string) {
@@ -32,20 +26,17 @@ export class XingService {
     }
   }
 
-  async loginByXing(userDto: any): Promise<LoginResponse> {
-    return await this.entityManager.transaction(async entityManager => {
-      const accountRepo = entityManager.getRepository(AccountEntity);
+  async loginByXing(userDto: any, hash: string): Promise<LoginResponse> {
+    await this.validateLogin(userDto, hash);
+    const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
 
-      let account = await accountRepo.findOne({ email: userDto.active_email });
-      if (!account) {
-        account = new AccountEntity();
-        account.email = userDto.active_email;
-        await entityManager.save(account);
-        await this.onRegisterHandler?.handle(entityManager, account, RegisterType.XING, userDto);
-      }
+    let user = await userRepo.findOne({ email: userDto.active_email });
+    if (!user) {
+      const userData = { email: userDto.active_email };
+      user = await this.authenticationService.register(userData, RegisterType.XING, userDto);
+    }
 
-      return this.authenticationService.loginInTransaction(entityManager, account);
-    });
+    return this.authenticationService.login(user);
   }
 
   private async generateUserDtoHash(userDto: any): Promise<string> {

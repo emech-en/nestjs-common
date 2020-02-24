@@ -10,21 +10,22 @@ export class AuthenticationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const token = request.headers.authorization;
+    // Authorization: Bearer <token>
+    const token = request.headers.authorization?.substr(7);
     logger.verbose(`Token read from request. TOKEN=${token}`);
     if (!token) {
       return true;
     }
 
     try {
-      const account = await this.authenticationService.verifyToken(token);
-      if (!account || account.isBanned) {
+      const user = await this.authenticationService.verifyToken(token);
+      if (!user || user.isBanned) {
         return false;
       }
-      logger.verbose(`Account found ID=${account.id} EMAIL=${account.email}}`);
+      logger.verbose(`Account found ID=${user.id} EMAIL=${user.email}}`);
 
-      (request as any).account = account;
-      (request as any).token = token;
+      request.currentUser = user;
+      request.token = token;
       return true;
     } catch (e) {
       logger.warn(`Error in AuthenticationGuard. MESSAGE=${e.message}`);
