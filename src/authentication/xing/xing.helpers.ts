@@ -1,12 +1,12 @@
-export const XING_LOGIN_HTML = 'XING_LOGIN_HTML';
-export const XING_SIGNATURE_SALT = 'XING_SIGNATURE_SALT';
-
-export const getXingLoginHtml = (consumerKey: string): string => {
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.XING_LOGIN_HTML = 'XING_LOGIN_HTML';
+exports.XING_SIGNATURE_SALT = 'XING_SIGNATURE_SALT';
+exports.getXingLoginHtml = consumerKey => {
   const pattern = '\\[\\[\\[\\[YOUR_CONSUMER_KEY\\]\\]\\]\\]';
   const replaceRegex = new RegExp(pattern, 'g');
   return LOGIN_HTML_TEMPLATE.replace(replaceRegex, consumerKey);
 };
-
 // noinspection ES6ConvertVarToLetConst,JSUnresolvedVariable,JSUnresolvedFunction,JSUnresolvedLibraryURL
 /**
  * ********************************* *
@@ -29,10 +29,10 @@ const LOGIN_HTML_TEMPLATE = `
     <script>
       window.verifyLogin = function(success, user, hash) {
         if (success) {
-          console.log("sending data for verify", user, hash);
-          $.post("verify", {user: user, hash: hash}, function(data) {
-            console.log("verify result: ", data);
-          });
+          var userString = JSON.stringify(user, function(key, value) { return value ? value : "" });
+          var url = "vyme://login/?user="+userString+"&hash="+hash;
+          alert("sending data for verify: " + url);
+          window.location = url;
         } else {
           console.log("login failed");
         }
@@ -56,12 +56,6 @@ const LOGIN_HTML_TEMPLATE = `
 
       var onXingAuthLoginIsCalled = false;
       function onXingAuthLogin(response) {
-        if (onXingAuthLoginIsCalled) {
-          return;
-        } else {
-          onXingAuthLoginIsCalled = true;
-        }
-
         if (window.verifyLogin) {
           if (response.user) {
             window.verifyLogin(true, response.user, getCookie("xing_p_lw_s_[[[[YOUR_CONSUMER_KEY]]]]"));
@@ -73,25 +67,24 @@ const LOGIN_HTML_TEMPLATE = `
     </script>
   </head>
   <body>
-    <script type="xing/login">
-      {
-        "consumer_key": "[[[[YOUR_CONSUMER_KEY]]]]"
-      }
-    </script>
-
+    <div style="display: none">
+      <script type="xing/login">
+        {
+          "consumer_key": "[[[[YOUR_CONSUMER_KEY]]]]"
+        }
+      </script>
+    </div>
+    
+    <div style="position:fixed; width: 100%; height: 100%; top: 0; left: 0;">
+      <button id="fakeLogin"
+        style="display: none; width: 80%; left: 10%; height: 4em; margin-top: -4em; font-size: 3em; position: absolute; top: 50%" 
+        onclick="$loginButton.click()">
+          BITTE KLICKEN SIE HIER
+      </button>
+    </div>  
+    
     <script>
-      (function(d) {
-        var js;
-        var id = "lwx";
-        if (d.getElementById(id)) return;
-        js = d.createElement("script");
-        js.id = id;
-        js.src = "https://www.xing-share.com/plugins/login.js";
-        d.getElementsByTagName("head")[0].appendChild(js);
-      })(document);
-    </script>
-
-    <script>
+      var $loginButton = undefined;
       (function findIFrame(d) {
         var $iFrame = $("body iframe:first-child");
         if ($iFrame.length === 0) {
@@ -101,11 +94,26 @@ const LOGIN_HTML_TEMPLATE = `
             var $loginBtn = $frame.contents().find("#xing-login");
             if ($loginBtn.length === 0) {
               return setTimeout(function() {doLogin($frame)}, 500);
-            } else {
-                $loginBtn.click()
+            } else {  
+              return setTimeout(function() {
+                $loginButton = $loginBtn;
+                $("#fakeLogin").show();
+              }, 10);
             }
           })($iFrame)
         }
+      })(document);
+    </script>
+    
+    <script>
+      (function(d) {
+        var js;
+        var id = "lwx";
+        if (d.getElementById(id)) return;
+        js = d.createElement("script");
+        js.id = id;
+        js.src = "https://www.xing-share.com/plugins/login.js";
+        d.getElementsByTagName("head")[0].appendChild(js);
       })(document);
     </script>
   </body>
