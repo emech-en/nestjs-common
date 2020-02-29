@@ -1,22 +1,19 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
-exports.XING_LOGIN_HTML = 'XING_LOGIN_HTML';
-exports.XING_SIGNATURE_SALT = 'XING_SIGNATURE_SALT';
-exports.getXingLoginHtml = consumerKey => {
+export const XING_LOGIN_HTML = 'XING_LOGIN_HTML';
+export const XING_SIGNATURE_SALT = 'XING_SIGNATURE_SALT';
+export const getXingLoginHtml = (consumerKey: string) => {
   const pattern = '\\[\\[\\[\\[YOUR_CONSUMER_KEY\\]\\]\\]\\]';
   const replaceRegex = new RegExp(pattern, 'g');
   return LOGIN_HTML_TEMPLATE.replace(replaceRegex, consumerKey);
 };
-// noinspection ES6ConvertVarToLetConst,JSUnresolvedVariable,JSUnresolvedFunction,JSUnresolvedLibraryURL
+
+// tslint:disable-next-line:max-line-length
+// noinspection ES6ConvertVarToLetConst,JSUnresolvedVariable,JSUnresolvedFunction,JSUnresolvedLibraryURL,JSCheckFunctionSignatures
 /**
  * ********************************* *
  * The Xing Login Page Html Template *
  *                                   *
  * PAY ATTENTION TO BACKTICK (` `)   *
  * THIS TEMPLATE IS A STRING HERE    *
- *                                   *
- * ToDo: Remove This verifyLogin function
- *                                   *
  * ********************************* *
  */
 const LOGIN_HTML_TEMPLATE = `
@@ -30,9 +27,9 @@ const LOGIN_HTML_TEMPLATE = `
       window.verifyLogin = function(success, user, hash) {
         if (success) {
           var userString = JSON.stringify(user, function(key, value) { return value ? value : "" });
-          var url = "vyme://login/?user="+userString+"&hash="+hash;
-          alert("sending data for verify: " + url);
-          window.location = url;
+          var url = "vyme://login?user="+userString+"&hash="+hash;
+          $("#continueButton").attr('href', url).show();
+          $("#fakeLogin").hide();
         } else {
           console.log("login failed");
         }
@@ -74,15 +71,19 @@ const LOGIN_HTML_TEMPLATE = `
         }
       </script>
     </div>
-    
+
     <div style="position:fixed; width: 100%; height: 100%; top: 0; left: 0;">
       <button id="fakeLogin"
-        style="display: none; width: 80%; left: 10%; height: 4em; margin-top: -4em; font-size: 3em; position: absolute; top: 50%" 
+        style="display: none; width: 80%; left: 10%; height: 4em; margin-top: -4em; font-size: 3em; position: absolute; top: 50%"
         onclick="$loginButton.click()">
           BITTE KLICKEN SIE HIER
       </button>
-    </div>  
-    
+      <a id="continueButton"
+        style="display: none; width: 80%; left: 10%; height: 4em; margin-top: -4em; font-size: 3em; position: absolute; top: 50%">
+          UM FORTZUFAHREN, KLICKEN SIE HIER
+      </a>
+    </div>
+
     <script>
       var $loginButton = undefined;
       (function findIFrame(d) {
@@ -94,7 +95,7 @@ const LOGIN_HTML_TEMPLATE = `
             var $loginBtn = $frame.contents().find("#xing-login");
             if ($loginBtn.length === 0) {
               return setTimeout(function() {doLogin($frame)}, 500);
-            } else {  
+            } else {
               return setTimeout(function() {
                 $loginButton = $loginBtn;
                 $("#fakeLogin").show();
@@ -104,7 +105,7 @@ const LOGIN_HTML_TEMPLATE = `
         }
       })(document);
     </script>
-    
+
     <script>
       (function(d) {
         var js;
