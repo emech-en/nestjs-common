@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserBaseEntity } from './user.base.entity';
 
 @Entity('accessToken')
@@ -6,14 +6,14 @@ export class AccessTokenEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @CreateDateColumn({ type: 'timestamp without time zone' })
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 
-  @CreateDateColumn({ type: 'timestamp without time zone' })
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
   updatedAt: Date;
 
   @Column({
-    type: 'timestamp without time zone',
+    type: 'timestamp with time zone',
     update: false,
   })
   expiresAt: Date;

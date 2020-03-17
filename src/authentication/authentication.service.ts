@@ -20,7 +20,7 @@ export class AuthenticationService {
     const repository = this.reqTransaction.getRepository(AccessTokenEntity);
 
     const token = new AccessTokenEntity();
-    token.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 1000);
+    token.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     token.user = user;
     const { id, expiresAt } = await repository.save(token);
     return { token: id, expiresAt };

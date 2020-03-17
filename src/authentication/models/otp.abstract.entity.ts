@@ -14,20 +14,20 @@ export abstract class OtpAbstractEntity {
   })
   code: string;
 
-  @CreateDateColumn({ type: 'timestamp without time zone' })
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 
   @Column({ type: 'integer' })
   retryLeft: number;
 
   @Column({
-    type: 'timestamp without time zone',
+    type: 'timestamp with time zone',
     update: false,
   })
   expiresAt: Date;
 
   @Column({
-    type: 'timestamp without time zone',
+    type: 'timestamp with time zone',
     nullable: true,
   })
   usedAt?: Date;
