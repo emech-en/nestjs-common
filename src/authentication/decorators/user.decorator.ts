@@ -1,10 +1,12 @@
-import { createParamDecorator, Logger, Type, UnauthorizedException } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext, Logger, Type, UnauthorizedException } from '@nestjs/common';
 import { UserBaseEntity } from '../models';
 
 const logger = new Logger('UserParamDecorator');
 
 export function createCurrentUserDecorator<T extends UserBaseEntity>(userType: Type<T>) {
-  return createParamDecorator<never, any, T>((data, req) => {
+  return createParamDecorator<never, ExecutionContext, T>((data, context) => {
+    const req = context.switchToHttp().getRequest();
+
     if (!req.currentUser) {
       throw new UnauthorizedException();
     }
