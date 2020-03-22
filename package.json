@@ -19,7 +19,7 @@
     "build:ts": "tsc",
     "build:clean": "rm -rf dest build",
     "build:copy": "node ./scripts/build.js",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
     "doPrepublishOnly": "yarn test && yarn run lint && yarn run format && yarn version",
     "doPublish": "yarn run doPrepublishOnly && yarn run build && cd build && yarn publish --non-interactive --access public && cd .. && yarn build:clean"

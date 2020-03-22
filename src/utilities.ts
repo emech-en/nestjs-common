@@ -6,6 +6,6 @@ interface StandardEnum<T> {
 
 export const getEnumValues = <T extends StandardEnum<any>>(enumObject: T): (string | number)[] => {
   return Object.keys(enumObject)
-    .filter(key => isNaN(+key))
-    .map(key => enumObject[key]);
+    .filter((key) => isNaN(+key))
+    .map((key) => enumObject[key]);
 };

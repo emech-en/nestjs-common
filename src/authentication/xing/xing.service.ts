@@ -58,10 +58,10 @@ export class XingService {
     const arrays: string[] = [];
 
     for (const key of keys) {
-      await new Promise(resolve => setImmediate(resolve));
+      await new Promise((resolve) => setImmediate(resolve));
       if (typeof user[key] === 'object') {
         const innerArray = await this.generateArrayList(user[key]);
-        arrays.push(...innerArray.map(s => key + s));
+        arrays.push(...innerArray.map((s) => key + s));
       } else {
         arrays.push(key + user[key]);
       }

@@ -3,13 +3,13 @@ import { IsEmail, IsString, MinLength, ValidateIf } from 'class-validator';
 
 export class PasswordRegisterRequestDto {
   @ApiPropertyOptional()
-  @ValidateIf(o => !o.username)
+  @ValidateIf((o) => !o.username)
   @IsString()
   @IsEmail()
   email?: string;
 
   @ApiPropertyOptional()
-  @ValidateIf(o => !o.email)
+  @ValidateIf((o) => !o.email)
   @MinLength(4)
   @IsString()
   username?: string;

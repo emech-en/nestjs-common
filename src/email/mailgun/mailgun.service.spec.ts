@@ -22,7 +22,7 @@ describe('EmailService', () => {
       ],
     })
       .compile()
-      .then(m => m.createNestApplication());
+      .then((m) => m.createNestApplication());
 
     service = testModule.get<MailgunService>(MailgunService);
   });

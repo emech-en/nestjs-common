@@ -19,7 +19,7 @@ export class RequestTransactionInterceptor implements NestInterceptor {
       logger.verbose(`RequestId=${requestId}: Context CREATED`);
 
       try {
-        const result = await this.entityManager.transaction(async entityManager => {
+        const result = await this.entityManager.transaction(async (entityManager) => {
           logger.verbose(`RequestId=${requestId}: Transaction STARTED`);
           clsContext.entityManager = entityManager;
           return await next.handle().toPromise();
