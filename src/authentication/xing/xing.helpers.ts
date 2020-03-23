@@ -1,9 +1,23 @@
 export const XING_LOGIN_HTML = 'XING_LOGIN_HTML';
 export const XING_SIGNATURE_SALT = 'XING_SIGNATURE_SALT';
-export const getXingLoginHtml = (consumerKey: string) => {
-  const pattern = '\\[\\[\\[\\[YOUR_CONSUMER_KEY\\]\\]\\]\\]';
+
+const replace = (key: string, value: string, template: string) => {
+  const pattern = '\\[\\[\\[\\[' + key + '\\]\\]\\]\\]';
   const replaceRegex = new RegExp(pattern, 'g');
-  return LOGIN_HTML_TEMPLATE.replace(replaceRegex, consumerKey);
+  return template.replace(replaceRegex, value);
+};
+
+export const getXingLoginHtml = (values: {
+  consumerKey: string;
+  redirectUrl: string;
+  buttonText: string;
+  linkText: string;
+}) => {
+  let html = replace('YOUR_CONSUMER_KEY', values.consumerKey, LOGIN_HTML_TEMPLATE);
+  html = replace('REDIRECT_URL', values.redirectUrl, html);
+  html = replace('BUTTON_TEXT', values.buttonText, html);
+  html = replace('LINK_TEXT', values.linkText, html);
+  return html;
 };
 
 // tslint:disable-next-line:max-line-length
@@ -27,7 +41,7 @@ const LOGIN_HTML_TEMPLATE = `
       window.verifyLogin = function(success, user, hash) {
         if (success) {
           var userString = JSON.stringify(user, function(key, value) { return value ? value : "" });
-          var url = "vyme://login?user="+userString+"&hash="+hash;
+          var url = "[[[[REDIRECT_URL]]]]?user="+userString+"&hash="+hash;
           $("#continueButton").attr('href', url).show();
           $("#fakeLogin").hide();
         } else {
@@ -76,11 +90,11 @@ const LOGIN_HTML_TEMPLATE = `
       <button id="fakeLogin"
         style="display: none; width: 80%; left: 10%; height: 4em; margin-top: -4em; font-size: 3em; position: absolute; top: 50%"
         onclick="$loginButton.click()">
-          BITTE KLICKEN SIE HIER
+          [[[[BUTTON_TEXT]]]]
       </button>
       <a id="continueButton"
         style="display: none; width: 80%; left: 10%; height: 4em; margin-top: -4em; font-size: 3em; position: absolute; top: 50%">
-          UM FORTZUFAHREN, KLICKEN SIE HIER
+         [[[[LINK_TEXT]]]]
       </a>
     </div>
 

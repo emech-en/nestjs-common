@@ -19,6 +19,9 @@ export interface AuthenticationModuleConfig {
   };
   xing?: {
     consumerKey: string;
+    redirectUrl: string;
+    buttonText: string;
+    linkText: string;
     signatureSalt: string;
   };
   registerService?: Type<RegisterService>;
@@ -75,7 +78,12 @@ export class AuthenticationModule {
       controllers.push(XingController);
 
       providers.push({
-        useValue: getXingLoginHtml(config.xing.consumerKey),
+        useValue: getXingLoginHtml({
+          consumerKey: config.xing.consumerKey,
+          redirectUrl: config.xing.redirectUrl,
+          buttonText: config.xing.buttonText,
+          linkText: config.xing.linkText,
+        }),
         provide: XING_LOGIN_HTML,
       });
       providers.push({
