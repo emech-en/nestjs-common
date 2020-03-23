@@ -41,7 +41,7 @@ const LOGIN_HTML_TEMPLATE = `
       window.verifyLogin = function(success, user, hash) {
         if (success) {
           var userString = JSON.stringify(user, function(key, value) { return value ? value : "" });
-          var url = "[[[[REDIRECT_URL]]]]?user="+userString+"&hash="+hash;
+          var url = "[[[[REDIRECT_URL]]]]?user="+window.btoa(userString)+"&hash="+hash;
           $("#continueButton").attr('href', url).show();
           $("#fakeLogin").hide();
         } else {
