@@ -24,11 +24,12 @@ export class FBService {
       })
       .toPromise();
     const userDto = userInfo.data;
+    const { email } = userDto;
 
     const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
-    let user = await userRepo.findOne({ email: userDto.email });
+    let user = await userRepo.findOne({ email });
     if (!user) {
-      const userData = { email: userDto.active_email };
+      const userData = { email };
       user = await this.authenticationService.register(userData, RegisterType.FACEBOOK, {
         ...userDto,
         fbToken: accessToken,
