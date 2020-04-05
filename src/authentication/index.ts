@@ -8,3 +8,4 @@ export * from './register';
 export * from './authentication.module';
 export * from './authentication.service';
 export * from './authentication.guard';
+export * from './fb';
