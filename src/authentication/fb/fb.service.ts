@@ -19,7 +19,7 @@ export class FBService {
         params: {
           // eslint-disable-next-line @typescript-eslint/camelcase
           access_token: accessToken,
-          fields: 'first_name, last_name, name,email',
+          fields: 'id,email,first_name,last_name,middle_name,name,name_format,picture,short_name',
         },
       })
       .toPromise();
