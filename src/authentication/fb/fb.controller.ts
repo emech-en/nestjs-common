@@ -4,15 +4,15 @@ import { LoginResponse } from '../dto';
 import { FBService } from './fb.service';
 import { FbLoginDto } from './fb.login.dto';
 
-@Controller('auth/xing')
+@Controller('auth/fb')
 @ApiTags('Authentication')
 export class FbController {
   constructor(private readonly fbService: FBService) {}
 
   @Post('/login')
-  @ApiOperation({ summary: 'Verify the Xing Login Response And Perform Actual Login' })
+  @ApiOperation({ summary: 'Verify Provided Facebook AccessToken and Perform Login/Register Operation' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
-  async verifyXingLogin(@Body() { fbToken }: FbLoginDto): Promise<LoginResponse> {
+  async loginByFacebookToken(@Body() { fbToken }: FbLoginDto): Promise<LoginResponse> {
     return this.fbService.loginByFacebook(fbToken);
   }
 }
