@@ -4,6 +4,7 @@ import { UserBaseEntity } from '../models';
 import { AuthenticationService } from '../authentication.service';
 import { RegisterType } from '../register';
 import { RequestTransaction } from '../../request-transaction';
+import { FbPublicProfileDto } from './dto';
 
 @Injectable()
 export class FBService {
@@ -13,9 +14,9 @@ export class FBService {
     private readonly httpService: HttpService,
   ) {}
 
-  async loginByFacebook(accessToken: string): Promise<LoginResponse> {
+  async getUserInfo(accessToken: string): Promise<FbPublicProfileDto> {
     const userInfo = await this.httpService
-      .get(`https://graph.facebook.com/me`, {
+      .get<FbPublicProfileDto>(`https://graph.facebook.com/me`, {
         params: {
           // eslint-disable-next-line @typescript-eslint/camelcase
           access_token: accessToken,
@@ -23,7 +24,11 @@ export class FBService {
         },
       })
       .toPromise();
-    const userDto = userInfo.data;
+    return userInfo.data;
+  }
+
+  async loginByFacebook(accessToken: string): Promise<LoginResponse> {
+    const userDto = await this.getUserInfo(accessToken);
     const { email } = userDto;
 
     const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
@@ -35,6 +40,7 @@ export class FBService {
         fbToken: accessToken,
       });
     }
+
     return this.authenticationService.login(user);
   }
 }

@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginResponse } from '../dto';
 import { FBService } from './fb.service';
-import { FbLoginDto } from './fb.login.dto';
+import { FbLoginDto } from './dto';
 
 @Controller('auth/fb')
 @ApiTags('Authentication')
