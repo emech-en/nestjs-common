@@ -1,4 +1,4 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, HttpModule, Module, Provider, Type } from '@nestjs/common';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 import { PasswordController, PasswordRegisterController, PasswordService } from './password';
@@ -8,6 +8,7 @@ import { RegisterBaseService, RegisterService } from './register';
 import { defaultsDeep } from 'lodash';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication.guard';
+import { FbController, FBService } from './fb';
 
 export interface AuthenticationModuleConfig {
   otp?: {
@@ -23,6 +24,9 @@ export interface AuthenticationModuleConfig {
     buttonText: string;
     linkText: string;
     signatureSalt: string;
+  };
+  facebook?: {
+    enabled: boolean;
   };
   registerService?: Type<RegisterService>;
 }
@@ -52,6 +56,7 @@ export class AuthenticationModule {
       useClass: AuthenticationGuard,
     } as Provider;
 
+    const imports: any[] = [HttpModule];
     const controllers: any[] = [AuthenticationController];
     const exports: Provider[] = [AuthenticationService, registerService];
     const providers: Provider[] = [AuthenticationService, registerService, authGourd];
@@ -95,8 +100,15 @@ export class AuthenticationModule {
       exports.push(XingService);
     }
 
+    if (config.facebook && config.facebook.enabled) {
+      controllers.push(FbController);
+      providers.push(FBService);
+      exports.push(FBService);
+    }
+
     return {
       module: AuthenticationModule,
+      imports,
       providers,
       controllers,
       exports,

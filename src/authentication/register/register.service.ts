@@ -4,6 +4,7 @@ export enum RegisterType {
   OTP = 'OTP',
   PASSWORD = 'PASSWORD',
   XING = 'XING',
+  FACEBOOK = 'FACEBOOK',
 }
 
 export abstract class RegisterService {
