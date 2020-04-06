@@ -29,12 +29,20 @@ export class FBService {
 
   async loginByFacebook(accessToken: string): Promise<LoginResponse> {
     const userDto = await this.getUserInfo(accessToken);
-    const { email } = userDto;
+    const { email, id } = userDto;
 
     const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
-    let user = await userRepo.findOne({ email });
+    let user = await userRepo.findOne({ facebookId: id });
+    if (!user && email) {
+      user = await userRepo.findOne({ email });
+      if (user) {
+        user.facebookId = id;
+        await userRepo.save(user);
+      }
+    }
+
     if (!user) {
-      const userData = { email };
+      const userData: Partial<UserBaseEntity> = { email, facebookId: id };
       user = await this.authenticationService.register(userData, RegisterType.FACEBOOK, {
         ...userDto,
         fbToken: accessToken,

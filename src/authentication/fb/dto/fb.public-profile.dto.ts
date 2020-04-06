@@ -1,6 +1,6 @@
 export interface FbPublicProfileDto {
   id: string;
-  email: string;
+  email: string | undefined;
   first_name: string;
   last_name: string;
   middle_name: string;

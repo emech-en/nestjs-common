@@ -18,6 +18,14 @@ export class UserBaseEntity extends AbstractEntity {
   @Column({ unique: true, nullable: true })
   phone?: string;
 
+  @ApiPropertyOptional({ uniqueItems: true, readOnly: true })
+  @Column({ unique: true, nullable: true })
+  facebookId?: string;
+
+  @ApiPropertyOptional({ uniqueItems: true, readOnly: true })
+  @Column({ unique: true, nullable: true })
+  xingId?: string;
+
   @Exclude()
   @Column({ nullable: true })
   password?: string;
@@ -40,6 +48,8 @@ export class UserBaseEntity extends AbstractEntity {
       this.phone = data.phone;
       this.password = data.password;
       this.shouldChangePassword = data.shouldChangePassword;
+      this.facebookId = data.facebookId;
+      this.xingId = data.xingId;
     }
   }
 }

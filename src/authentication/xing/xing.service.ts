@@ -28,11 +28,20 @@ export class XingService {
 
   async loginByXing(userDto: any, hash: string): Promise<LoginResponse> {
     await this.validateLogin(userDto, hash);
-    const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
+    const { active_email, id } = userDto;
 
-    let user = await userRepo.findOne({ email: userDto.active_email });
+    const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
+    let user = await userRepo.findOne({ xingId: id });
+    if (!user && active_email) {
+      user = await userRepo.findOne({ email: active_email });
+      if (user) {
+        user.xingId = id;
+        await userRepo.save(user);
+      }
+    }
+
     if (!user) {
-      const userData = { email: userDto.active_email };
+      const userData: Partial<UserBaseEntity> = { email: userDto.active_email, xingId: id };
       user = await this.authenticationService.register(userData, RegisterType.XING, userDto);
     }
 
