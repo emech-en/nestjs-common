@@ -3,10 +3,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginResponse } from './dto';
 import { RequestTransaction } from '../request-transaction';
 import { RegisterService, RegisterType } from './register';
+import { FindConditions } from 'typeorm';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly reqTransaction: RequestTransaction, private readonly registerService: RegisterService) {}
+  constructor(private readonly reqTransaction: RequestTransaction, private readonly registerService: RegisterService) {
+  }
 
   async register(
     userData: Partial<UserBaseEntity>,
@@ -45,5 +47,13 @@ export class AuthenticationService {
     }
     accessToken.isLoggedOut = true;
     await repository.save(accessToken);
+  }
+
+  async userExists(
+    query: Pick<FindConditions<UserBaseEntity>, 'xingId' | 'facebookId' | 'email' | 'phone' | 'username'>,
+  ): Promise<boolean> {
+    const userRepo = this.reqTransaction.getRepository(UserBaseEntity);
+    const count = await userRepo.count(query);
+    return count > 0;
   }
 }
