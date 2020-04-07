@@ -7,8 +7,7 @@ import { FindConditions } from 'typeorm';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly reqTransaction: RequestTransaction, private readonly registerService: RegisterService) {
-  }
+  constructor(private readonly reqTransaction: RequestTransaction, private readonly registerService: RegisterService) {}
 
   async register(
     userData: Partial<UserBaseEntity>,
