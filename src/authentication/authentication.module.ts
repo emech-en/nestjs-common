@@ -1,4 +1,4 @@
-import { DynamicModule, HttpModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, Global, HttpModule, Module, Provider, Type } from '@nestjs/common';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 import { PasswordController, PasswordRegisterController, PasswordService } from './password';
@@ -42,6 +42,7 @@ const DEFAULT_CONFIG: AuthenticationModuleConfig = {
   registerService: RegisterBaseService,
 };
 
+@Global()
 @Module({})
 export class AuthenticationModule {
   static forRoot(config: AuthenticationModuleConfig = {}): DynamicModule {
