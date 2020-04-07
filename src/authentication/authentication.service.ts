@@ -7,7 +7,8 @@ import { FindConditions } from 'typeorm';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly reqTransaction: RequestTransaction, private readonly registerService: RegisterService) {}
+  constructor(private readonly reqTransaction: RequestTransaction, private readonly registerService: RegisterService) {
+  }
 
   async register(
     userData: Partial<UserBaseEntity>,
@@ -54,5 +55,12 @@ export class AuthenticationService {
     const userRepo = this.reqTransaction.getRepository(UserBaseEntity);
     const count = await userRepo.count(query);
     return count > 0;
+  }
+
+  async userNotExists(
+    query: Pick<FindConditions<UserBaseEntity>, 'xingId' | 'facebookId' | 'email' | 'phone' | 'username'>,
+  ): Promise<boolean> {
+    const userExists = await this.userExists(query);
+    return !userExists;
   }
 }
