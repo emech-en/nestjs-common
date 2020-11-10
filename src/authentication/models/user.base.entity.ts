@@ -19,6 +19,9 @@ export class UserBaseEntity extends AbstractEntity {
   @Column({ unique: true, nullable: true })
   xingId?: string;
 
+  @Column({ unique: true, nullable: true })
+  googleId?: string;
+
   @Column({ nullable: true })
   password?: string;
 
@@ -39,6 +42,7 @@ export class UserBaseEntity extends AbstractEntity {
       this.shouldChangePassword = data.shouldChangePassword;
       this.facebookId = data.facebookId;
       this.xingId = data.xingId;
+      this.googleId = data.googleId;
     }
   }
 }

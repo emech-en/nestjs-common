@@ -5,6 +5,7 @@ export enum RegisterType {
   PASSWORD = 'PASSWORD',
   XING = 'XING',
   FACEBOOK = 'FACEBOOK',
+  GOOGLE = 'GOOGLE',
 }
 
 export abstract class RegisterService {

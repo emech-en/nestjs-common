@@ -9,6 +9,7 @@ import { defaultsDeep } from 'lodash';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication.guard';
 import { FbController, FBService } from './fb';
+import { GoogleContorller, GoogleService, GOOGLE_WEB_CLIENT_ID } from './google';
 
 export interface AuthenticationModuleConfig {
   otp?: {
@@ -28,6 +29,9 @@ export interface AuthenticationModuleConfig {
   facebook?: {
     enabled: boolean;
   };
+  google?: {
+    webClientID: string;
+  },
   registerService?: Type<RegisterService>;
 }
 
@@ -104,6 +108,16 @@ export class AuthenticationModule {
       controllers.push(FbController);
       providers.push(FBService);
       exports.push(FBService);
+    }
+
+    if (config.google) {
+      controllers.push(GoogleContorller);
+      providers.push(GoogleService);
+      exports.push(GoogleService);
+      providers.push({
+        useValue: config.google.webClientID,
+        provide: GOOGLE_WEB_CLIENT_ID,
+      });
     }
 
     return {
