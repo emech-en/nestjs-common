@@ -31,7 +31,7 @@ export interface AuthenticationModuleConfig {
   };
   google?: {
     webClientID: string;
-  },
+  };
   registerService?: Type<RegisterService>;
 }
 

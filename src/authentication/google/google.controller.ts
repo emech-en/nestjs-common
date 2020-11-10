@@ -12,7 +12,7 @@ export class GoogleContorller {
   @Post('/login')
   @ApiOperation({ summary: 'Verify Provided Google LoginInfo and Perform Login/Register Operation' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
-  async loginByGoogle(@Body()  loginDto: GoogleLoginDto): Promise<LoginResponse> {
+  async loginByGoogle(@Body() loginDto: GoogleLoginDto): Promise<LoginResponse> {
     return this.googleService.loginByGoogle(loginDto);
   }
 }
