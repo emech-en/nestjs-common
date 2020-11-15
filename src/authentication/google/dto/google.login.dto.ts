@@ -9,12 +9,11 @@ export class GoogleLoginDto {
   idToken?: string | null;
 
   @ApiProperty()
-  @IsArray({ each: true })
+  @IsArray()
   @IsOptional()
   scopes?: string[] | null;
 
   @ValidateNested()
   @IsNotEmpty()
-  @IsInstance(GoogleLoginDto)
   user: GoogleUserDto;
 }
