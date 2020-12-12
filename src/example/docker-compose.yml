@@ -1,0 +1,22 @@
+version: '2'
+services:
+  postgres:
+    image: postgis/postgis:12-3.0
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=nestjs-common-example
+    volumes:
+      - pgis_data:/var/lib/postgresql/data
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
+        mode: host
+
+
+volumes:
+  pgis_data:
+    driver: local
+    external: false
