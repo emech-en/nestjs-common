@@ -1,3 +1,13 @@
+# [5.0.0-develop.1](https://github.com/emech-en/nestjs-common/compare/v4.0.1-develop.1...v5.0.0-develop.1) (2020-12-12)
+
+
+* Update main.yml ([2c52339](https://github.com/emech-en/nestjs-common/commit/2c523398d8bb98dcba08cb758b01903fbc72644c))
+
+
+### BREAKING CHANGES
+
+* `password` module renamed to `basic-auth`
+
 ## [4.0.1-develop.1](https://github.com/emech-en/nestjs-common/compare/v4.0.0...v4.0.1-develop.1) (2020-12-12)
 
 
