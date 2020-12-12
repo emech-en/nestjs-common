@@ -1,3 +1,11 @@
+## [5.0.1](https://github.com/emech-en/nestjs-common/compare/v5.0.0...v5.0.1) (2020-12-12)
+
+
+### Bug Fixes
+
+* add env variable to main github workflow ([1833dc9](https://github.com/emech-en/nestjs-common/commit/1833dc9fe0e10616767f1de760664a2e0cca2b9a))
+* add semantic release github ([14d7827](https://github.com/emech-en/nestjs-common/commit/14d78276eb04b48265cda0f0331e8efb370aecbf))
+
 # [5.0.0](https://github.com/emech-en/nestjs-common/compare/v4.0.0...v5.0.0) (2020-12-12)
 
 
