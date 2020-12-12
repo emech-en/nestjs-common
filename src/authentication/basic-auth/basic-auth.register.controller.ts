@@ -3,18 +3,18 @@ import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@ne
 import { UserBaseEntity } from '../models';
 import { LoginResponse } from '../dto';
 import { AuthenticationService } from '../authentication.service';
-import { PasswordRegisterRequestDto } from './dto';
-import { PasswordService } from './password.service';
+import { BasicAuthRegisterRequestDto } from './dto';
+import { BasicAuthService } from './basic-auth.service';
 import { RequestTransaction } from '../../request-transaction';
 import { RegisterType } from '../register';
 
-@Controller('auth/password')
+@Controller('auth/basic')
 @ApiTags('Authentication')
-export class PasswordRegisterController {
+export class BasicAuthRegisterController {
   constructor(
     private readonly requestTransaction: RequestTransaction,
     private readonly authenticationService: AuthenticationService,
-    private readonly passwordService: PasswordService,
+    private readonly basicAuthService: BasicAuthService,
   ) {}
 
   @Head('username/:username')
@@ -60,7 +60,7 @@ export class PasswordRegisterController {
   @Post('register')
   @ApiOperation({ summary: 'Register new user' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
-  async login(@Body() req: PasswordRegisterRequestDto): Promise<LoginResponse> {
+  async login(@Body() req: BasicAuthRegisterRequestDto): Promise<LoginResponse> {
     const { username, email, password } = req;
     if ((!username && !email) || !password) {
       throw new BadRequestException();
@@ -76,7 +76,7 @@ export class PasswordRegisterController {
     const userData = {
       email,
       username,
-      password: await this.passwordService.hash(password),
+      password: await this.basicAuthService.hash(password),
     };
 
     const user = await this.authenticationService.register(userData, RegisterType.PASSWORD);

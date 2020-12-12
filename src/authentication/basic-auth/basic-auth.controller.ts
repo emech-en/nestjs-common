@@ -2,25 +2,25 @@ import { BadRequestException, Body, Controller, Patch, Post, UnauthorizedExcepti
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserBaseEntity } from '../models';
 import { LoginResponse } from '../dto';
-import { PasswordChangeRequestDto, PasswordLoginRequestDto, PasswordSetRequestDto } from './dto';
-import { PasswordService } from './password.service';
+import { PasswordChangeRequestDto, BasicAuthRequestDto, PasswordSetRequestDto } from './dto';
+import { BasicAuthService } from './basic-auth.service';
 import { AuthenticationService } from '../authentication.service';
 import { RequestTransaction } from '../../request-transaction';
 import { CurrentUserBase } from '../decorators';
 
-@Controller('auth/password')
+@Controller('auth/basic')
 @ApiTags('Authentication')
-export class PasswordController {
+export class BasicAuthController {
   constructor(
     private readonly requestTransaction: RequestTransaction,
     private readonly authenticationService: AuthenticationService,
-    private readonly passwordService: PasswordService,
+    private readonly basicAuthService: BasicAuthService,
   ) {}
 
   @Post('login')
   @ApiOperation({ summary: 'Login to System Using One Time Password' })
   @ApiOkResponse({ description: 'User access token', type: LoginResponse })
-  async login(@Body() req: PasswordLoginRequestDto): Promise<LoginResponse> {
+  async login(@Body() req: BasicAuthRequestDto): Promise<LoginResponse> {
     const { username, email, password } = req;
     if ((!username && !email) || !password) {
       throw new BadRequestException();
@@ -33,14 +33,14 @@ export class PasswordController {
       throw new UnauthorizedException();
     }
 
-    if (await this.passwordService.verify(password, user.password)) {
+    if (await this.basicAuthService.verify(password, user.password)) {
       return this.authenticationService.login(user);
     } else {
       throw new UnauthorizedException();
     }
   }
 
-  @Patch('/')
+  @Patch('/password')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Change current user Password' })
   @ApiOkResponse({ description: 'Password Changed Successfully.' })
@@ -53,14 +53,14 @@ export class PasswordController {
     }
 
     const { currentPassword, newPassword } = request;
-    if (!(await this.passwordService.verify(currentPassword, currentUser.password))) {
+    if (!(await this.basicAuthService.verify(currentPassword, currentUser.password))) {
       throw new UnauthorizedException();
     }
 
-    await this.passwordService.setUserPassword(currentUser, newPassword);
+    await this.basicAuthService.setUserPassword(currentUser, newPassword);
   }
 
-  @Post('/')
+  @Post('/password')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Set current user password' })
   @ApiOkResponse({ description: 'Password Set Successfully.' })
@@ -72,6 +72,6 @@ export class PasswordController {
       throw new UnauthorizedException();
     }
 
-    await this.passwordService.setUserPassword(currentUser, password);
+    await this.basicAuthService.setUserPassword(currentUser, password);
   }
 }

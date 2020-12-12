@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsString, ValidateIf } from 'class-validator';
 
-export class PasswordLoginRequestDto {
+export class BasicAuthRequestDto {
   @ApiPropertyOptional()
   @ValidateIf((o) => !o.email)
   @IsString()
