@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/emech-en/nestjs-common/compare/v2.1.0...v3.0.0) (2020-12-12)
+
+
+### Features
+
+* dummy version pump ([e3c3e16](https://github.com/emech-en/nestjs-common/commit/e3c3e16b81f8210c25caf5f43be3876b486ff5a8))
+
+
+### BREAKING CHANGES
+
+* Pump version to 3
+
 # [2.1.0](https://github.com/emech-en/nestjs-common/compare/v2.0.11...v2.1.0) (2020-12-12)
 
 
