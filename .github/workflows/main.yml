@@ -25,5 +25,5 @@ jobs:
       - name: Install NPM Packages
         run: yarn install
       
-      - name: Run Semantic Versioning
+      - name: Run Semantic Versioning Test
         run: yarn sem-ver
