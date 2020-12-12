@@ -4,7 +4,7 @@ import { UserBaseEntity } from '../models';
 import { RequestTransaction } from '../../request-transaction';
 
 @Injectable()
-export class PasswordService {
+export class BasicAuthService {
   constructor(private readonly requestTransaction: RequestTransaction) {}
 
   public async hash(password: string): Promise<string> {

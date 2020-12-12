@@ -1,7 +1,7 @@
 import { DynamicModule, HttpModule, Module, Provider, Type } from '@nestjs/common';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
-import { PasswordController, PasswordRegisterController, PasswordService } from './password';
+import { BasicAuthController, BasicAuthRegisterController, BasicAuthService } from './basic-auth';
 import { OtpEmailController, OtpSmsController } from './otp';
 import { getXingLoginHtml, XING_LOGIN_HTML, XING_SIGNATURE_SALT, XingController, XingService } from './xing';
 import { RegisterBaseService, RegisterService } from './register';
@@ -16,7 +16,7 @@ export interface AuthenticationModuleConfig {
     email: boolean;
     sms: boolean;
   };
-  password?: {
+  basicAuth?: {
     register: boolean;
   };
   xing?: {
@@ -40,7 +40,7 @@ const DEFAULT_CONFIG: AuthenticationModuleConfig = {
     email: true,
     sms: false,
   },
-  password: {
+  basicAuth: {
     register: false,
   },
   registerService: RegisterBaseService,
@@ -65,12 +65,12 @@ export class AuthenticationModule {
     const exports: Provider[] = [AuthenticationService, registerService];
     const providers: Provider[] = [AuthenticationService, registerService, authGourd];
 
-    if (config.password) {
-      controllers.push(PasswordController);
-      providers.push(PasswordService);
-      exports.push(PasswordService);
-      if (config.password.register) {
-        controllers.push(PasswordRegisterController);
+    if (config.basicAuth) {
+      controllers.push(BasicAuthController);
+      providers.push(BasicAuthService);
+      exports.push(BasicAuthService);
+      if (config.basicAuth.register) {
+        controllers.push(BasicAuthRegisterController);
       }
     }
 

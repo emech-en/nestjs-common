@@ -1,7 +1,7 @@
 import { AuthenticationModule } from '../../authentication';
 
 export const AuthModule = AuthenticationModule.forRoot({
-  password: {
+  basicAuth: {
     register: true,
   },
   otp: {
