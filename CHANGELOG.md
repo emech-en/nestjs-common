@@ -1,3 +1,10 @@
+## [4.0.1-develop.1](https://github.com/emech-en/nestjs-common/compare/v4.0.0...v4.0.1-develop.1) (2020-12-12)
+
+
+### Bug Fixes
+
+* rename password module to basic-auth module ([cff6d3c](https://github.com/emech-en/nestjs-common/commit/cff6d3ce607b3685b1323e8e2083a9884bb71638))
+
 # [4.0.0](https://github.com/emech-en/nestjs-common/compare/v3.1.0...v4.0.0) (2020-12-12)
 
 
