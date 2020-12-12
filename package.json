@@ -91,9 +91,7 @@
   ],
   "release": {
     "branches": [
-      {
-        "name": "master"
-      },
+      "master",
       {
         "name": "develop",
         "channel": "next"
