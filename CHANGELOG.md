@@ -1,3 +1,10 @@
+## [5.0.2](https://github.com/emech-en/nestjs-common/compare/v5.0.1...v5.0.2) (2020-12-12)
+
+
+### Bug Fixes
+
+* semantic release config ([6a59a82](https://github.com/emech-en/nestjs-common/commit/6a59a82736c280442e6d727a2bf0a587d2b8c7c8))
+
 ## [5.0.1](https://github.com/emech-en/nestjs-common/compare/v5.0.0...v5.0.1) (2020-12-12)
 
 
