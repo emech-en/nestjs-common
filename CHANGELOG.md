@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/emech-en/nestjs-common/compare/v3.1.0...v4.0.0) (2020-12-12)
+
+
+### chore
+
+* pump version 4 ([b35fd83](https://github.com/emech-en/nestjs-common/commit/b35fd835050ddfe54284235cdf1cb8c69dc00168))
+
+
+### BREAKING CHANGES
+
+* Pump Version To 4
+
 # [3.1.0](https://github.com/emech-en/nestjs-common/compare/v3.0.0...v3.1.0) (2020-12-12)
 
 
