@@ -22,7 +22,11 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
     "doPrepublishOnly": "yarn test && yarn run lint && yarn run format && yarn version",
-    "doPublish": "yarn run doPrepublishOnly && yarn run build && cd build && yarn publish --non-interactive --access public && cd .. && yarn build:clean"
+    "doPublish": "yarn run doPrepublishOnly && yarn run build && cd build && yarn publish --non-interactive --access public && cd .. && yarn build:clean",
+    "example:run": "ts-node src/example/main.ts",
+    "example:typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/example/typeorm.config.ts",
+    "example:typeorm:migrate": "yarn example:typeorm migration:generate -n",
+    "example:typeorm:run": "yarn example:typeorm migration:run"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -50,10 +54,14 @@
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
     "jest": "^25.1.0",
+    "pg": "^8.5.1",
     "prettier": "^2.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
+    "swagger-ui-express": "^4.1.5",
     "ts-jest": "^25.2.1",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
     "tslint": "^6.1.0",
     "typeorm": "^0.2.24",
     "typescript": "^3.8.3"
