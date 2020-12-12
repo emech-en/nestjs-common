@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/emech-en/nestjs-common/compare/v4.0.0...v4.0.1) (2020-12-12)
+
+
+### Bug Fixes
+
+* add env variable to main github workflow ([1833dc9](https://github.com/emech-en/nestjs-common/commit/1833dc9fe0e10616767f1de760664a2e0cca2b9a))
+
 # [4.0.0](https://github.com/emech-en/nestjs-common/compare/v3.1.0...v4.0.0) (2020-12-12)
 
 
