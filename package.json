@@ -114,7 +114,8 @@
         {
           "message": "chore(release): ${nextRelease.version} [SEMANTIC RELEASE]"
         }
-      ]
+      ],
+      "@semantic-release/github"
     ]
   }
 }
