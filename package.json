@@ -96,7 +96,7 @@
       },
       {
         "name": "develop",
-        "prerelease": true
+        "channel": "next"
       }
     ],
     "plugins": [
