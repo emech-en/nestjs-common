@@ -1,3 +1,10 @@
+## [5.0.4-develop.1](https://github.com/emech-en/nestjs-common/compare/v5.0.3...v5.0.4-develop.1) (2020-12-19)
+
+
+### Bug Fixes
+
+* to test build and release from dev branch ([ec6897b](https://github.com/emech-en/nestjs-common/commit/ec6897b72018833c8d593f760189eab86b64eb38))
+
 ## [5.0.3](https://github.com/emech-en/nestjs-common/compare/v5.0.2...v5.0.3) (2020-12-19)
 
 
