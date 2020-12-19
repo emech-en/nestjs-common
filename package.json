@@ -115,11 +115,21 @@
           "message": "chore(release): ${nextRelease.version} [SEMANTIC RELEASE]"
         }
       ],
-      "@semantic-release/github",
       [
         "@semantic-release/exec",
         {
           "prepareCmd": "yarn build"
+        }
+      ],
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "dist",
+              "label": "Builded package"
+            }
+          ]
         }
       ],
       [
