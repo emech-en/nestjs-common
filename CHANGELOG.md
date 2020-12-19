@@ -1,3 +1,10 @@
+## [5.0.3](https://github.com/emech-en/nestjs-common/compare/v5.0.2...v5.0.3) (2020-12-19)
+
+
+### Bug Fixes
+
+* add npm publish step to semantic release ([91eac47](https://github.com/emech-en/nestjs-common/commit/91eac47391b531c854b162e8f34ada3a38bdeb57))
+
 ## [5.0.2](https://github.com/emech-en/nestjs-common/compare/v5.0.1...v5.0.2) (2020-12-12)
 
 
