@@ -95,7 +95,8 @@
       "master",
       {
         "name": "develop",
-        "channel": "next"
+        "channel": "next",
+        "prerelease": true
       }
     ],
     "plugins": [

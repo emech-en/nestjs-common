@@ -27,6 +27,9 @@ jobs:
       - name: Install NPM Packages
         run: yarn install
       
+      - name: Create the ./build dir and copy package.json
+        run: mkdir build & cp ./package.json ./build
+        
       - name: Run Semantic Versioning Dummy
         run: yarn sem-ver
       
