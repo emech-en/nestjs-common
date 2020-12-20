@@ -126,7 +126,7 @@
         {
           "assets": [
             {
-              "path": "dist",
+              "path": "dist/*",
               "label": "Builded package"
             }
           ]
