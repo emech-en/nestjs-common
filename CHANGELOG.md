@@ -1,3 +1,10 @@
+## [5.0.4-develop.2](https://github.com/emech-en/nestjs-common/compare/v5.0.4-develop.1...v5.0.4-develop.2) (2020-12-20)
+
+
+### Bug Fixes
+
+* sem-ver config ([f3e9bd6](https://github.com/emech-en/nestjs-common/commit/f3e9bd6689ac881bd2960fcdf859c9a290f78428))
+
 ## [5.0.4-develop.1](https://github.com/emech-en/nestjs-common/compare/v5.0.3...v5.0.4-develop.1) (2020-12-19)
 
 
