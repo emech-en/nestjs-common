@@ -26,7 +26,7 @@ export class BasicAuthRegisterController {
   @ApiOkResponse({ description: 'Username is valid.' })
   @ApiBadRequestResponse({ description: 'Username is invalid.' })
   async checkUsername(@Param('username') username: string): Promise<void> {
-    if (!username || !this.options.username?.register?.required) {
+    if (!username || !this.options.username?.register) {
       throw new BadRequestException();
     }
     const userRepo = this.requestTransaction.getRepository(UserBaseEntity);
