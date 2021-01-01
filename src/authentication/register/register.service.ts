@@ -9,7 +9,7 @@ export enum RegisterType {
 }
 
 export abstract class RegisterService {
-  abstract async register(
+  abstract register(
     userData: Partial<UserBaseEntity>,
     registerType: RegisterType,
     registerData?: any,
