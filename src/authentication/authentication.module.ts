@@ -1,7 +1,6 @@
 import { DynamicModule, HttpModule, Module, Provider, Type } from '@nestjs/common';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
-import { BasicAuthController, BasicAuthRegisterController, BasicAuthService } from './basic-auth';
 import { OtpEmailController, OtpSmsController } from './otp';
 import { getXingLoginHtml, XING_LOGIN_HTML, XING_SIGNATURE_SALT, XingController, XingService } from './xing';
 import { RegisterBaseService, RegisterService } from './register';
@@ -10,15 +9,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication.guard';
 import { FbController, FBService } from './fb';
 import { GoogleContorller, GoogleService, GOOGLE_WEB_CLIENT_ID } from './google';
+import { BasicAuthDefaults, BasicAuthOptions, configureBasicAuth } from './basic-auth';
 
 export interface AuthenticationModuleConfig {
   otp?: {
     email: boolean;
     sms: boolean;
   };
-  basicAuth?: {
-    register: boolean;
-  };
+  basicAuth?: BasicAuthOptions;
   xing?: {
     consumerKey: string;
     redirectUrl: string;
@@ -40,9 +38,7 @@ const DEFAULT_CONFIG: AuthenticationModuleConfig = {
     email: true,
     sms: false,
   },
-  basicAuth: {
-    register: false,
-  },
+  basicAuth: BasicAuthDefaults,
   registerService: RegisterBaseService,
 };
 
@@ -66,12 +62,11 @@ export class AuthenticationModule {
     const providers: Provider[] = [AuthenticationService, registerService, authGourd];
 
     if (config.basicAuth) {
-      controllers.push(BasicAuthController);
-      providers.push(BasicAuthService);
-      exports.push(BasicAuthService);
-      if (config.basicAuth.register) {
-        controllers.push(BasicAuthRegisterController);
-      }
+      const basicAuth = configureBasicAuth(config.basicAuth);
+      imports.push(...basicAuth.imports);
+      providers.push(...basicAuth.providers);
+      exports.push(...basicAuth.exports);
+      controllers.push(...basicAuth.controllers);
     }
 
     if (config.otp && (config.otp.email || config.otp.sms)) {

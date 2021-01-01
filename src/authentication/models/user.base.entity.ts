@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, TableInheritance } from 'typeorm';
 import { AbstractEntity } from '../../models';
 
@@ -9,6 +10,9 @@ export class UserBaseEntity extends AbstractEntity {
 
   @Column({ unique: true, nullable: true })
   email?: string;
+
+  @Column({ nullable: true, type: 'timestamp with time zone' })
+  emailVerified?: Date;
 
   @Column({ unique: true, nullable: true })
   phone?: string;
@@ -23,6 +27,7 @@ export class UserBaseEntity extends AbstractEntity {
   googleId?: string;
 
   @Column({ nullable: true })
+  @Exclude()
   password?: string;
 
   @Column({ nullable: true })
