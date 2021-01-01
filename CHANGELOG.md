@@ -1,3 +1,16 @@
+# [6.0.0-develop.1](https://github.com/emech-en/nestjs-common/compare/v5.0.4-develop.2...v6.0.0-develop.1) (2021-01-01)
+
+
+### Bug Fixes
+
+* basic-auth username check ([9f16114](https://github.com/emech-en/nestjs-common/commit/9f1611465b442fee31828f9a0f6daffb8611648f))
+* change the id column to be uuid ([fb7f715](https://github.com/emech-en/nestjs-common/commit/fb7f715faf8176464881f56ca5bc30c58d7820d5))
+
+
+### BREAKING CHANGES
+
+* The type of the id column is changed from number to string (uuid).
+
 ## [5.0.4-develop.2](https://github.com/emech-en/nestjs-common/compare/v5.0.4-develop.1...v5.0.4-develop.2) (2020-12-20)
 
 
