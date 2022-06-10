@@ -63,7 +63,7 @@
     "prettier": "^2.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
-    "semantic-release": "^17.3.0",
+    "semantic-release": "^19.0.3",
     "swagger-ui-express": "^4.1.5",
     "ts-jest": "^25.2.1",
     "ts-node": "^9.1.1",
